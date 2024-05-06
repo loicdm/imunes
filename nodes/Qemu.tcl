@@ -37,7 +37,7 @@
 #  types that work on the same layer.
 #****
 
-set MODULE pc
+set MODULE Qemu
 
 registerModule $MODULE
 
@@ -78,7 +78,7 @@ proc $MODULE.confNewNode { node } {
     global nodeNamingBase
 
     set nconfig [list \
-	"hostname [getNewNodeNameType pc $nodeNamingBase(pc)]" \
+	"hostname [getNewNodeNameType Qemu $nodeNamingBase(pc)]" \
 	! ]
     lappend $node "network-config [list $nconfig]"
 
@@ -103,13 +103,13 @@ proc $MODULE.icon { size } {
     global ROOTDIR LIBDIR
     switch $size {
       normal {
-	return $ROOTDIR/$LIBDIR/icons/normal/pc.gif
+	return $ROOTDIR/$LIBDIR/icons/normal/Qemu.gif
       }
       small {
-	return $ROOTDIR/$LIBDIR/icons/small/pc.gif
+	return $ROOTDIR/$LIBDIR/icons/small/Qemu.gif
       }
       toolbar {
-	return $ROOTDIR/$LIBDIR/icons/tiny/pc.gif
+	return $ROOTDIR/$LIBDIR/icons/tiny/Qemu.gif
       }
     }
 }
@@ -125,7 +125,7 @@ proc $MODULE.icon { size } {
 #   * descr -- string describing the toolbar icon
 #****
 proc $MODULE.toolbarIconDescr {} {
-    return "Add new PC"
+    return "Add new Qemu"
 }
 
 #****f* pc.tcl/pc.notebookDimensions
@@ -384,7 +384,7 @@ proc $MODULE.configGUI { c node } {
     set guielements {}
 
     configGUI_createConfigPopupWin $c
-    wm title $wi "pc configuration"
+    wm title $wi "Qemu configuration"
     configGUI_nodeName $wi $node "Node name:"
 
     set tabs [configGUI_addNotebook $wi $node {"Configuration" "Interfaces"}]
