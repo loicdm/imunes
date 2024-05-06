@@ -365,6 +365,27 @@ proc $MODULE.nghook { eid node ifc } {
     return [l3node.nghook $eid $node $ifc]
 }
 
+
+
+
+proc launchQEMU {memory disk cpus} {
+    set cmd "qemu-system-x86_64 -m $memory -drive file=$disk -smp $cpus"
+    exec $cmd &
+
+# ici on ajoute les code qui font que les interface se connect
+}
+
+# Function to open file dialog and set selected disk image
+proc selectDisk {} {
+    set selectedDisk [tk_getOpenFile -filetypes {{"Disk Images" {.img .iso}}}]
+    if {$selectedDisk ne ""} {
+        .diskEntry delete 0 end
+        .diskEntry insert 0 $selectedDisk
+    }
+}
+
+
+
 #****f* pc.tcl/pc.configGUI
 # NAME
 #   pc.configGUI -- configuration GUI
@@ -379,30 +400,35 @@ proc $MODULE.nghook { eid node ifc } {
 #   * node -- node id
 #****
 proc $MODULE.configGUI { c node } {
-    global wi
-    global guielements treecolumns
-    set guielements {}
+wm title . "QEMU Interface"
+label .memLabel -text "Memory (MB):"
+entry .memEntry -width 10
+label .diskLabel -text "Disk Image:"
+entry .diskEntry -width 30
+button .browseBtn -text "Browse" -command selectDisk
+label .cpuLabel -text "CPUs:"
+entry .cpuEntry -width 5
 
-    configGUI_createConfigPopupWin $c
-    wm title $wi "Qemu configuration"
-    configGUI_nodeName $wi $node "Node name:"
+button .launchBtn -text "Launch QEMU" -command {
+    set memory [string trim [.memEntry get]]
+    set disk [string trim [.diskEntry get]]
+    set cpus [string trim [.cpuEntry get]]
+    if {$memory eq "" || $disk eq "" || $cpus eq ""} {
+        tk_messageBox -title "Error" -message "Please fill in all fields."
+    } else {
+        launchQEMU $memory $disk $cpus
+    }
+}
 
-    set tabs [configGUI_addNotebook $wi $node {"Configuration" "Interfaces"}]
-    set configtab [lindex $tabs 0]
-    set ifctab [lindex $tabs 1]
-
-    set treecolumns {"OperState State" "IPv4addr IPv4 addr" "IPv6addr IPv6 addr" \
-	    "MACaddr MAC addr" "MTU MTU" "QLen Queue len" "QDisc Queue disc" "QDrop Queue drop"}
-    configGUI_addTree $ifctab $node
-
-    configGUI_dockerImage $configtab $node
-    configGUI_attachDockerToExt $configtab $node
-    configGUI_servicesConfig $configtab $node
-    configGUI_staticRoutes $configtab $node
-    configGUI_snapshots $configtab $node
-    configGUI_customConfig $configtab $node
-
-    configGUI_buttonsACNode $wi $node
+# Layout
+grid .memLabel -row 0 -column 0 -sticky e
+grid .memEntry -row 0 -column 1 -sticky w
+grid .diskLabel -row 1 -column 0 -sticky e
+grid .diskEntry -row 1 -column 1 -sticky w
+grid .browseBtn -row 1 -column 2
+grid .cpuLabel -row 2 -column 0 -sticky e
+grid .cpuEntry -row 2 -column 1 -sticky w
+grid .launchBtn -row 3 -columnspan 3
 }
 
 #****f* pc.tcl/pc.configInterfacesGUI
