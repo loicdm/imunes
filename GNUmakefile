@@ -14,6 +14,8 @@ NODESDIR = $(IMUNESDIR)/nodes
 RUNTIMEDIR = $(IMUNESDIR)/runtime
 SCRIPTSDIR = $(IMUNESDIR)/scripts
 PATCHESDIR = $(IMUNESDIR)/src/patches
+WIFIFILESDIR = $(IMUNESDIR)/WIFI
+WIFISCRIPTSDIR = $(IMUNESDIR)/ScriptWIFI
 NORMAL_ICONSDIR = $(ICONSDIR)/normal
 SMALL_ICONSDIR = $(ICONSDIR)/small
 TINY_ICONSDIR = $(ICONSDIR)/tiny
@@ -27,19 +29,22 @@ VROOT_EXISTS = $(shell [ -d /var/imunes/vroot ] && echo 1 || echo 0 )
 SERVICEDIR=/usr/local/etc/rc.d
 STARTUPDIR=/var/imunes-service
 
-BASEFILES =	COPYRIGHT README VERSION
+BASEFILES =	COPYRIGHT README VERSION ReadmeWIFI.md
 CONFIGFILES =	$(wildcard config/*.tcl)
 GUIFILES =	$(wildcard gui/*.tcl)
 NODESFILES =	$(wildcard nodes/*.tcl)
 RUNTIMEFILES =	$(wildcard runtime/*.tcl)
 PATCHESFILES =	$(wildcard src/patches/*)
+WIFIFILES =     $(wildcard WIFI/*)
+WIFISCRIPTS =   $(wildcard ScriptWIFI/*)
+
 
 VROOT =	$(wildcard scripts/*.sh scripts/*.bash)
 TOOLS =	$(filter-out $(VROOT), $(wildcard scripts/*))
 
 NODE_ICONS = frswitch.gif hub.gif lanswitch.gif rj45.gif cloud.gif host.gif \
 	ipfirewall.gif pc.gif router.gif click_l2.gif click_l3.gif \
-	stpswitch.gif filter.gif packgen.gif nat64.gif ext.gif nouveauPc.gif nouveauRouteur.gif wifiAP.png wifiSTA.png
+	stpswitch.gif filter.gif packgen.gif nat64.gif ext.gif nouveauPc.gif nouveauRouteur.gif wifiAP.png wifiSTA.png Pclone.png
 
 NORMAL_ICONS = $(NODE_ICONS)
 
@@ -115,6 +120,12 @@ endif
 
 	mkdir -p $(PATCHESDIR)
 	cp $(PATCHESFILES) $(PATCHESDIR)
+
+	mkdir -p $(WIFIFILESDIR)
+	cp -r $(WIFIFILES) $(WIFIFILESDIR)
+
+	mkdir -p $(WIFISCRIPTSDIR)
+	cp -r $(WIFISCRIPTS) $(WIFISCRIPTSDIR)
 
 	mkdir -p $(ICONSDIR)
 	for file in $(ICONS); do \
