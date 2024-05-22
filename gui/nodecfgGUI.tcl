@@ -1948,7 +1948,31 @@ proc configGUI_dockerImage { wi node } {
 
     pack $w -fill both
 }
+proc configGUI_qemuImage { wi node } {
+    global VROOT_MASTER isOSlinux
 
+    if { !$isOSlinux } {
+	return
+    }
+
+    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    global guielements
+    lappend guielements configGUI_qemuImage
+
+    set qemu_image "" 
+   
+    set w $wi.qemuImg
+    ttk::frame $w -relief groove -borderwidth 2 -padding 2
+    ttk::label $w.label -text "Qemu image:"
+
+    pack $w.label -side left -padx 2
+
+    ttk::entry $w.img -width 40
+    $w.img insert 0 $qemu_image
+    pack $w.img -side left -padx 7
+
+    pack $w -fill both
+}
 #****f* nodecfgGUI.tcl/configGUI_cpuConfig
 # NAME
 #   configGUI_cpuConfig -- configure GUI - CPU configuration

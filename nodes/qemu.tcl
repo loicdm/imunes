@@ -395,7 +395,7 @@ proc $MODULE.configGUI { c node } {
 	    "MACaddr MAC addr" "MTU MTU" "QLen Queue len" "QDisc Queue disc" "QDrop Queue drop"}
     configGUI_addTree $ifctab $node
 
-    configGUI_cpuConfig $configtab $node
+    configGUI_qemuImage $configtab $node
     # configGUI_useKvm $configtab $node
     # configGUI_memory $configtab $node
 
