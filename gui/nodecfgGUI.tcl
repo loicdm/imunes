@@ -2043,7 +2043,7 @@ proc configGUI_qemuBootType { wi node } {
     global guielements
     lappend guielements configGUI_qemuImageType
 
-    set qemu_boot_type [getNodeqemuBootype $node]
+    set qemu_boot_type [getNodeqemuBootType $node]
 
     set w $wi.qemuBootType
     ttk::frame $w -relief groove -borderwidth 2 -padding 2
