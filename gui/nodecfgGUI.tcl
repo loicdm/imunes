@@ -1964,7 +1964,7 @@ proc configGUI_qemuImage { wi node } {
 
     set w $wi.qemuImg
     ttk::frame $w -relief groove -borderwidth 2 -padding 2
-    ttk::label $w.label -text "qemu image:"
+    ttk::label $w.label -text "Qemu Disk Image:"
 
     pack $w.label -side left -padx 2
 
@@ -1982,7 +1982,7 @@ proc configGUI_qemuImage { wi node } {
 
 proc browseQemuImage {entryWidget} {
     # Open file dialog
-    set filename [tk_getOpenFile -title "Select QEMU Image" -filetypes {{"All Files" "*"} {"QEMU Image Files" "*.qcow2"}}]
+    set filename [tk_getOpenFile -title "Select QEMU Disk Image" -filetypes {{"All Files" "*"} {"QEMU Image Files" "*.qcow2"}}]
     # If a file was selected, insert the file path into the entry widget
     if {$filename ne ""} {
         $entryWidget delete 0 end
@@ -2005,7 +2005,7 @@ proc configGUI_qemuIso { wi node } {
 
     set w $wi.qemuIso
     ttk::frame $w -relief groove -borderwidth 2 -padding 2
-    ttk::label $w.label -text "qemu iso:"
+    ttk::label $w.label -text "Iso File:"
 
     pack $w.label -side left -padx 2
 
@@ -2023,7 +2023,7 @@ proc configGUI_qemuIso { wi node } {
 
 proc browseQemuIso {entryWidget} {
     # Open file dialog
-    set filename [tk_getOpenFile -title "Select Iso" -filetypes {{"All Files" "*"} {"Iso Files" "*.iso"}}]
+    set filename [tk_getOpenFile -title "Select Iso File" -filetypes {{"All Files" "*"} {"Iso Files" "*.iso"}}]
     # If a file was selected, insert the file path into the entry widget
     if {$filename ne ""} {
         $entryWidget delete 0 end
