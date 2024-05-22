@@ -1990,8 +1990,6 @@ proc browseQemuImage {entryWidget} {
     }
 }
 
-
-
 proc configGUI_qemuImageType { wi node } {
     global VROOT_MASTER isOSlinux
 
@@ -2012,20 +2010,14 @@ proc configGUI_qemuImageType { wi node } {
     pack $w.label -side left -padx 2
 
     # Radio button for selecting image type
-    set imgType $qemu_image_type
-    ttk::radiobutton $w.radioDisk -text "Disk Image" -variable imgType -value 0
-    ttk::radiobutton $w.radioIso -text "ISO File" -variable imgType -value 1
+    set imgType($w) $qemu_image_type
+    ttk::radiobutton $w.radioDisk -text "Disk Image" -variable imgType($w) -value 0
+    ttk::radiobutton $w.radioIso -text "ISO File" -variable imgType($w) -value 1
     pack $w.radioDisk -side left -padx 7
     pack $w.radioIso -side left -padx 7
 
     pack $w -fill both
-
-    # Initialize the image type variable
-    set ::imgType($w) $qemu_image_type
 }
-
-
-
 
 proc configGUI_qemuMemory { wi node } {
     global VROOT_MASTER isOSlinux
