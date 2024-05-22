@@ -2018,9 +2018,9 @@ proc configGUI_qemuImageType { wi node } {
 
     pack $w -fill both
 
-    # Initialize the image type entry widget
+    # Initialize the image type variable
     set $w.imgType $qemu_image_type
-    }
+}
 
 
 proc configGUI_qemuMemory { wi node } {
