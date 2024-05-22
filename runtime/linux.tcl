@@ -596,9 +596,12 @@ proc createNodeQemu { node } {
     set iso [getNodeqemuIso $node]
     set kvm [getNodeqemuKvm $node]
   if {$bootType == 0} {
-    catch { exec qemu-system-x86_64 -m $memory -hda $image $kvm -nic tap -display none -vga qxl -vnc :0 -k fr -daemonize -qmp unix:/tmp/qmp-sock,server,wait=off}
+    puts "boot in disk mode"
+    catch { exec qemu-system-x86_64 -m $memory -hda $image -nic tap -display none -vga qxl -vnc :0 -k fr -daemonize -qmp unix:/tmp/qmp-sock,server,wait=off}
   } else {
-    catch { exec qemu-system-x86_64 -m $memory -hda $image $kvm -nic tap -display none -vga qxl -vnc :0 -k fr -daemonize -qmp unix:/tmp/qmp-sock,server,wait=off -cdrom $iso -boot order=d
+
+    puts "boot in iso mode"
+    catch { exec qemu-system-x86_64 -m $memory -hda $image -nic tap -display none -vga qxl -vnc :0 -k fr -daemonize -qmp unix:/tmp/qmp-sock,server,wait=off -cdrom $iso -boot order=d
   }
   }
 
