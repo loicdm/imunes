@@ -2041,7 +2041,7 @@ proc configGUI_qemuBootType { wi node } {
 
     upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
     global guielements
-    lappend guielements configGUI_qemuImageType
+    lappend guielements configGUI_qemuBootType
 
     set qemu_boot_type [getNodeqemuBootType $node]
 
@@ -2096,7 +2096,7 @@ proc configGUI_qemuKvm { wi node } {
 
     upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
     global guielements
-    lappend guielements configGUI_qemuImageType
+    lappend guielements configGUI_qemuKvm
 
     set qemu_kvm [getNodeqemuKvm $node]
 
