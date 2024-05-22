@@ -2996,6 +2996,16 @@ proc configGUI_qemuBootTypeApply { wi node } {
     }
 }
 
+proc configGUI_qemuKvmApply { wi node } {
+    upvar #0 bootType qemu_kvm
+    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    if { $oper_mode == "edit"} {
+        if { [getNodeqemuKvm $node] != $qemu_kvm } {
+            setNodeqemuKvm $node $qemu_kvm
+            set changed 1
+        }
+    }
+}
 
 
 proc configGUI_qemuMemoryApply { wi node } {
