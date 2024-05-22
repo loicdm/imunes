@@ -293,7 +293,7 @@ proc $MODULE.shellcmds {} {
 #   * node -- node id (type of the node is qemu)
 #****
 proc $MODULE.instantiate { eid node } {
-    l3node.instantiate $eid $node
+    l3node.instantiateQemu $eid $node
 }
 
 #****f* qemu.tcl/qemu.start

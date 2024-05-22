@@ -943,7 +943,9 @@ if {$type == "routeur"} {
 
 } elseif {$type == "wifiSTA"} {
    runConfOnNodeSTA $node
-} else {
+} elseif {$type == "qemu"} {
+      
+}  else {
     startIfcsNode $node
     runConfOnNode $node
 }
