@@ -2788,35 +2788,14 @@ proc setNodeDockerAttach { node enabled } {
 	lappend $node [list docker-attach $enabled]
     }
 }
-#****f* nodecfg.tcl/getNodeqemuImage
-# NAME
-#   getNodeqemuImage -- get node qemu image.
-# SYNOPSIS
-#   set value [getNodeqemuImage $node]
-# FUNCTION
-#   Returns node qemu image setting.
-# INPUTS
-#   * node -- node id
-# RESULT
-#   * status -- qemu image identifier
-#****
+
+
 proc getNodeqemuImage { node } {
     upvar 0 ::cf::[set ::curcfg]::$node $node
 
     return [lindex [lsearch -inline [set $node] "qemu-image *"] 1]
 }
 
-#****f* nodecfg.tcl/setNodeqemuImage
-# NAME
-#   setNodeqemuImage -- set node qemu image.
-# SYNOPSIS
-#   setNodeqemuImage $node $img
-# FUNCTION
-#   Sets node qemu image.
-# INPUTS
-#   * node -- node id
-#   * img -- image identifier
-#****
 proc setNodeqemuImage { node img } {
     upvar 0 ::cf::[set ::curcfg]::$node $node
 
@@ -2826,6 +2805,28 @@ proc setNodeqemuImage { node img } {
     }
     if { $img != "" } {
 	lappend $node [list qemu-image $img]
+    }
+}
+
+proc getNodeqemuKvm { node } {
+    upvar 0 ::cf::[set ::curcfg]::$node $node
+
+    if { [lindex [lsearch -inline [set $node] "qemu-kvm *"] 1] == true } {
+	return true
+    } else {
+	return false
+    }
+}
+
+proc setNodeqemuAttach { node enabled } {
+    upvar 0 ::cf::[set ::curcfg]::$node $node
+
+    set i [lsearch [set $node] "qemu-kvm *"]
+    if { $i >= 0 } {
+	set $node [lreplace [set $node] $i $i]
+    }
+    if { $enabled == true } {
+	lappend $node [list qemu-kvm $enabled]
     }
 }
 
