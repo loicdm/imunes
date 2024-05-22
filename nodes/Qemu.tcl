@@ -125,7 +125,7 @@ proc $MODULE.icon { size } {
 #   * descr -- string describing the toolbar icon
 #****
 proc $MODULE.toolbarIconDescr {} {
-    return "Add new Qemu"
+    return "Add new qemu"
 }
 
 #****f* pc.tcl/pc.notebookDimensions
@@ -384,7 +384,7 @@ proc $MODULE.configGUI { c node } {
     set guielements {}
 
     configGUI_createConfigPopupWin $c
-    wm title $wi "Qemu configuration"
+    wm title $wi "qemu configuration"
     configGUI_nodeName $wi $node "Node name:"
 
     set tabs [configGUI_addNotebook $wi $node {"Configuration" "Interfaces"}]
