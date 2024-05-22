@@ -211,7 +211,7 @@ proc $MODULE.layer {} {
 #   * layer -- set to VIMAGE
 #****
 proc $MODULE.virtlayer {} {
-    return QEMU
+    return NETGRAPH
 }
 
 #****f* qemu.tcl/qemu.cfggen
