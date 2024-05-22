@@ -2807,6 +2807,28 @@ proc configGUI_dockerImageApply { wi node } {
     }
 }
 
+#****f* nodecfgGUI.tcl/configGUI_qemuImageApply
+# NAME
+#   configGUI_qemuImageApply -- configure GUI - qemu image apply
+# SYNOPSIS
+#   configGUI_qemuImageApply $wi $node
+# FUNCTION
+#   Saves changes in the module with different qemuImage
+# INPUTS
+#   * wi -- widget
+#   * node -- node id
+#****
+proc configGUI_qemuImageApply { wi node } {
+    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    set qemu_image [$wi.qemuImg.img get]
+    if { $oper_mode == "edit"} {
+	if { [getNodeqemuImage $node] != $qemu_image } {
+	    setNodeqemuImage $node $qemu_image
+	    set changed 1
+	}
+    }
+}
+
 #****f* nodecfgGUI.tcl/configGUI_cpuConfigApply
 # NAME
 #   configGUI_cpuConfigApply -- configure GUI - CPU configuration apply
