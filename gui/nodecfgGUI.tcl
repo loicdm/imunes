@@ -2017,7 +2017,6 @@ proc configGUI_qemuImageType { wi node } {
     pack $w.radioIso -side left -padx 7
 
     pack $w -fill both
-    puts $radioVar
     set $w.imgType $radioVar
 }
 
@@ -2918,6 +2917,7 @@ proc configGUI_qemuImageApply { wi node } {
 proc configGUI_qemuImageTypeApply { wi node } {
     upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
     set qemu_image_type $wi.qemuImgType.imgType
+    puts $qemu_image_type
     if { $oper_mode == "edit"} {
 	if { [getNodeqemuImageType $node] != $qemu_image_type } {
 	    setNodeqemuImageType $node $qemu_image_type
