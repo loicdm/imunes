@@ -590,8 +590,7 @@ proc createNodeQemu { node } {
     set node_id "$eid.$node"
 
 
-
-    set image "/root/alpine.qcow2"
+    set image [getNodeqemuImage $node]
 
     catch { exec qemu-system-x86_64 -m 1024 -hda $image -accel kvm -nic tap -display none -vga qxl -vnc :0 -k fr &} 
 
