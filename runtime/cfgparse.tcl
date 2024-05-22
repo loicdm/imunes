@@ -487,6 +487,9 @@ proc loadCfg { cfg } {
 			qemu-image {
 			    lappend $object "qemu-image $value"
 			}
+			qemu-image-type {
+			    lappend $object "qemu-image-type $value"
+			}
      qemu-kvm {
 			    lappend $object "qemu-kvm $value"
 			}

@@ -1990,6 +1990,36 @@ proc browseQemuImage {entryWidget} {
     }
 }
 
+proc configGUI_qemuImageType { wi node } {
+    global VROOT_MASTER isOSlinux
+
+    if { !$isOSlinux } {
+        return
+    }
+
+    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    global guielements
+    lappend guielements configGUI_qemuImageType
+
+    set qemu_image_type [getNodeqemuImageType $node]
+
+    set w $wi.qemuImgType
+    ttk::frame $w -relief groove -borderwidth 2 -padding 2
+    ttk::label $w.label -text "qemu image type:"
+
+    pack $w.label -side left -padx 2
+
+    # Entry widget to show the selected file path
+    ttk::entry $w.imgType -width 40
+    $w.imgType insert 0 $qemu_image_type
+    pack $w.imgType -side left -padx 7
+
+    # File browse button
+    ttk::button $w.browse -text "Browse..." -command [list browseQemuImage $w.imgType]
+    pack $w.browse -side left -padx 7
+
+    pack $w -fill both
+}
 
 
 proc configGUI_qemuMemory { wi node } {
@@ -2874,6 +2904,28 @@ proc configGUI_qemuImageApply { wi node } {
     }
 }
 
+
+#****f* nodecfgGUI.tcl/configGUI_qemuImageTypeApply
+# NAME
+#   configGUI_qemuImageTypeApply -- configure GUI - qemu image apply
+# SYNOPSIS
+#   configGUI_qemuImageTypeApply $wi $node
+# FUNCTION
+#   Saves changes in the module with different qemuImageType
+# INPUTS
+#   * wi -- widget
+#   * node -- node id
+#****
+proc configGUI_qemuImageTypeApply { wi node } {
+    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    set qemu_image_type [$wi.qemuImg.imgType get]
+    if { $oper_mode == "edit"} {
+	if { [getNodeqemuImageType $node] != $qemu_image_type } {
+	    setNodeqemuImageType $node $qemu_image_type
+	    set changed 1
+	}
+    }
+}
 
 
 proc configGUI_qemuMemoryApply { wi node } {
