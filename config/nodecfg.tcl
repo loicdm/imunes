@@ -2818,7 +2818,7 @@ proc getNodeqemuKvm { node } {
     }
 }
 
-proc setNodeqemuAttach { node enabled } {
+proc setNodeqemuKvm { node enabled } {
     upvar 0 ::cf::[set ::curcfg]::$node $node
 
     set i [lsearch [set $node] "qemu-kvm *"]
