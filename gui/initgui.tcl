@@ -201,6 +201,7 @@ array set nodeNamingBase {
     packgen packgen
     stpswitch stpswitch
     Pclone Pclone
+    qemu qemu
 }
 
 # Packets required for GUI
