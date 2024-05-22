@@ -2009,17 +2009,18 @@ proc configGUI_qemuImageType { wi node } {
 
     pack $w.label -side left -padx 2
 
-    # Entry widget to show the selected file path
-    ttk::entry $w.imgType -width 40
-    $w.imgType insert 0 $qemu_image_type
-    pack $w.imgType -side left -padx 7
-
-    # File browse button
-    ttk::button $w.browse -text "Browse..." -command [list browseQemuImage $w.imgType]
-    pack $w.browse -side left -padx 7
+    # Radio button for selecting image type
+    set imgType $qemu_image_type
+    ttk::radiobutton $w.radioDisk -text "Disk Image" -variable imgType -value 0 -command [list setImageType $wi.imgType $imgType]
+    ttk::radiobutton $w.radioIso -text "ISO File" -variable imgType -value 1 -command [list setImageType $wi.imgType $imgType]
+    pack $w.radioDisk -side left -padx 7
+    pack $w.radioIso -side left -padx 7
 
     pack $w -fill both
-}
+
+    # Initialize the image type entry widget
+    set $wi.imgType $qemu_image_type
+    }
 
 
 proc configGUI_qemuMemory { wi node } {
