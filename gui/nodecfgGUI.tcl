@@ -2892,6 +2892,7 @@ proc configGUI_dockerImageApply { wi node } {
 #****
 proc configGUI_qemuImageApply { wi node } {
     upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    puts $wi.qemuImg.img
     set qemu_image [$wi.qemuImg.img get]
     if { $oper_mode == "edit"} {
 	if { [getNodeqemuImage $node] != $qemu_image } {
