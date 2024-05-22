@@ -572,6 +572,37 @@ proc createNodeContainer { node } {
 
 }
 
+#****f* linux.tcl/createNodeQemu
+# NAME
+#   createNodeQemu -- creates a virtual node container
+# SYNOPSIS
+#   createNodeContainer $node
+# FUNCTION
+#   Creates a docker instance using the defined template and
+#   assigns the hostname. Waits for the node to be up.
+# INPUTS
+#   * node -- node id
+#****
+proc createNodeQemu { node } {
+    upvar 0 ::cf::[set ::curcfg]::eid eid
+    global VROOT_MASTER ULIMIT_FILE ULIMIT_PROC debug
+    
+    set node_id "$eid.$node"
+
+
+
+    set vroot [getNodeDockerImage $node]
+    if { $vroot == "" } {
+        set vroot $VROOT_MASTER
+
+    }
+
+    catch { exec qemu-system-x86_64 -m 1024 -hda $vroot } 
+
+
+}
+
+
 proc createNodeContainerN { node } {
 
  upvar 0 ::cf::[set ::curcfg]::eid eid

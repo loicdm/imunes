@@ -901,6 +901,13 @@ proc l3node.instantiateSTA { eid node } {
     createNodeLogIfcs $node
 #    configureICMPoptions $node
 }
+
+proc l3node.instantiateQemu { eid node } {
+    prepareFilesystemForNode $node
+    createNodeQemu $node
+    createNodePhysIfcs $node
+    createNodeLogIfcs $node
+}
 #****f* exec.tcl/l3node.start
 # NAME
 #   l3node.start -- layer 3 node start
