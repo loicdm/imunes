@@ -1976,6 +1976,31 @@ proc configGUI_qemuImage { wi node } {
 }
 
 
+proc configGUI_qemuMemory { wi node } {
+    global VROOT_MASTER isOSlinux
+
+    if { !$isOSlinux } {
+	return
+    }
+
+    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    global guielements
+    lappend guielements configGUI_qemuMemory
+
+    set qemu_memory [getNodeqemuMemory $node]
+   
+    set w $wi.qemuMem
+    ttk::frame $w -relief groove -borderwidth 2 -padding 2
+    ttk::label $w.label -text "qemu memory:"
+
+    pack $w.label -side left -padx 2
+
+    ttk::entry $w.img -width 40
+    $w.img insert 0 $qemu_memory
+    pack $w.img -side left -padx 7
+
+    pack $w -fill both
+}
 
 #****f* nodecfgGUI.tcl/configGUI_cpuConfig
 # NAME
@@ -2832,6 +2857,20 @@ proc configGUI_qemuImageApply { wi node } {
 	}
     }
 }
+
+
+
+proc configGUI_qemuMemoryApply { wi node } {
+    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    set qemu_memory [$wi.qemuMem.mem get]
+    if { $oper_mode == "edit"} {
+	if { [getNodeqemuMemory $node] != $qemu_memory } {
+	    setNodeqemuMemory $node $qemu_memory
+	    set changed 1
+	}
+    }
+}
+
 
 #****f* nodecfgGUI.tcl/configGUI_cpuConfigApply
 # NAME

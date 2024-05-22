@@ -490,6 +490,9 @@ proc loadCfg { cfg } {
      qemu-kvm {
 			    lappend $object "qemu-kvm $value"
 			}
+    qemu-memory {
+			    lappend $object "qemu-memory $value"
+			}
       events {
 			    set cfg ""
 			    foreach zline [split $value {

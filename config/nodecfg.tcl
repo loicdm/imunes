@@ -2807,6 +2807,23 @@ proc setNodeqemuImage { node img } {
 	lappend $node [list qemu-image $img]
     }
 }
+proc getNodeqemuMemory { node } {
+    upvar 0 ::cf::[set ::curcfg]::$node $node
+
+    return [lindex [lsearch -inline [set $node] "qemu-memory *"] 1]
+}
+
+proc setNodeqemuMemory { node mem } {
+    upvar 0 ::cf::[set ::curcfg]::$node $node
+
+    set i [lsearch [set $node] "qemu-memory *"]
+    if { $i >= 0 } {
+	set $node [lreplace [set $node] $i $i]
+    }
+    if { $mem != "" } {
+	lappend $node [list qemu-memory $mem]
+    }
+}
 
 proc getNodeqemuKvm { node } {
     upvar 0 ::cf::[set ::curcfg]::$node $node
