@@ -2914,17 +2914,22 @@ proc configGUI_qemuImageApply { wi node } {
 #   * wi -- widget
 #   * node -- node id
 #****
+
 proc configGUI_qemuImageTypeApply { wi node } {
-    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
-    set qemu_image_type [upvar configGUI_qemuImageType radioVar]
+    upvar #0 radioVar qemu_image_type
+
     puts $qemu_image_type
+
+    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+
     if { $oper_mode == "edit"} {
-	if { [getNodeqemuImageType $node] != $qemu_image_type } {
-	    setNodeqemuImageType $node $qemu_image_type
-	    set changed 1
-	}
+        if { [getNodeqemuImageType $node] != $qemu_image_type } {
+            setNodeqemuImageType $node $qemu_image_type
+            set changed 1
+        }
     }
 }
+
 
 
 proc configGUI_qemuMemoryApply { wi node } {
