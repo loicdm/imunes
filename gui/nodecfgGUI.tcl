@@ -2915,6 +2915,7 @@ proc configGUI_qemuImageApply { wi node } {
 #****
 proc configGUI_qemuImageTypeApply { wi node } {
     upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    puts $wi.qemuImgType.imgType
     set qemu_image_type [$wi.qemuImgType.imgType get]
     if { $oper_mode == "edit"} {
 	if { [getNodeqemuImageType $node] != $qemu_image_type } {
