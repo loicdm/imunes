@@ -596,13 +596,13 @@ proc createNodeQemu { node } {
     set iso [getNodeqemuIso $node]
     set kvm [getNodeqemuKvm $node]
   if {$bootType == 0} {
-    puts "qemu-system-x86_64 $kvm -m $memory -hda $image -nic tap -display none -vga qxl -vnc :0 -k fr -daemonize -qmp unix:/tmp/qmp-sock,server,wait=off"
-    catch { exec qemu-system-x86_64 $kvm -m $memory -hda $image -nic tap -display none -vga qxl -vnc :0 -k fr -daemonize -qmp unix:/tmp/qmp-sock,server,wait=off}
+    puts "qemu-system-x86_64 -m $memory -hda $image -nic tap -display none -vga qxl -vnc :0 -k fr -qmp unix:/tmp/qmp-sock,server,wait=off $kvm"
+    catch { exec qemu-system-x86_64 -m $memory -hda $image -nic tap -display none -vga qxl -vnc :0 -k fr -qmp unix:/tmp/qmp-sock,server,wait=off $kvm}
   } else {
-    puts " qemu-system-x86_64 $kvm -m $memory -hda $image -nic tap -display none -vga qxl -vnc :0 -k fr -daemonize -qmp unix:/tmp/qmp-sock,server,wait=off -cdrom $iso -boot order=d
+    puts " qemu-system-x86_64 -m $memory -hda $image -nic tap -display none -vga qxl -vnc :0 -k fr -qmp unix:/tmp/qmp-sock,server,wait=off -cdrom $iso -boot order=d
 "
 
-    catch { exec qemu-system-x86_64 $kvm -m $memory -hda $image -nic tap -display none -vga qxl -vnc :0 -k fr -daemonize -qmp unix:/tmp/qmp-sock,server,wait=off -cdrom $iso -boot order=d
+    catch { exec qemu-system-x86_64 -m $memory -hda $image -nic tap -display none -vga qxl -vnc :0 -k fr -qmp unix:/tmp/qmp-sock,server,wait=off -cdrom $iso -boot order=d $kvm 
   }
   }
 
