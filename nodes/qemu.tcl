@@ -309,7 +309,7 @@ proc $MODULE.instantiate { eid node } {
 #   * node -- node id (type of the node is qemu)
 #****
 proc $MODULE.start { eid node } {
-    l3node.start $eid $node
+    l3node.startQemu $eid $node
 }
 
 #****f* qemu.tcl/qemu.shutdown
@@ -325,7 +325,7 @@ proc $MODULE.start { eid node } {
 #   * node -- node id (type of the node is qemu)
 #****
 proc $MODULE.shutdown { eid node } {
-    l3node.shutdown $eid $node
+    l3node.shutdownQemu $eid $node
 }
 
 #****f* qemu.tcl/qemu.destroy
@@ -341,7 +341,7 @@ proc $MODULE.shutdown { eid node } {
 #   * node -- node id (type of the node is qemu)
 #****
 proc $MODULE.destroy { eid node } {
-    l3node.destroy $eid $node
+    l3node.destroyQemu $eid $node
 }
 
 #****f* qemu.tcl/qemu.nghook
@@ -395,12 +395,9 @@ proc $MODULE.configGUI { c node } {
 	    "MACaddr MAC addr" "MTU MTU" "QLen Queue len" "QDisc Queue disc" "QDrop Queue drop"}
     configGUI_addTree $ifctab $node
 
-    configGUI_dockerImage $configtab $node
-    configGUI_attachDockerToExt $configtab $node
-    configGUI_servicesConfig $configtab $node
-    configGUI_staticRoutes $configtab $node
-    configGUI_snapshots $configtab $node
-    configGUI_customConfig $configtab $node
+    configGUI_cpuConfig $configtab $node
+    # configGUI_useKvm $configtab $node
+    # configGUI_memory $configtab $node
 
     configGUI_buttonsACNode $wi $node
 }
