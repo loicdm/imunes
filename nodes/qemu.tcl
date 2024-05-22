@@ -23,29 +23,29 @@
 # SUCH DAMAGE.
 #
 
-# $Id: pc.tcl 63 2013-10-03 12:17:50Z valter $
+# $Id: qemu.tcl 63 2013-10-03 12:17:50Z valter $
 
 
-#****h* imunes/pc.tcl
+#****h* imunes/qemu.tcl
 # NAME
-#  pc.tcl -- defines pc specific procedures
+#  qemu.tcl -- defines qemu specific procedures
 # FUNCTION
-#  This module is used to define all the pc specific procedures.
+#  This module is used to define all the qemu specific procedures.
 # NOTES
-#  Procedures in this module start with the keyword pc and
+#  Procedures in this module start with the keyword qemu and
 #  end with function specific part that is the same for all the node
 #  types that work on the same layer.
 #****
 
-set MODULE Qemu
+set MODULE qemu
 
 registerModule $MODULE
 
-#****f* pc.tcl/pc.confNewIfc
+#****f* qemu.tcl/qemu.confNewIfc
 # NAME
-#   pc.confNewIfc -- configure new interface
+#   qemu.confNewIfc -- configure new interface
 # SYNOPSIS
-#   pc.confNewIfc $node $ifc
+#   qemu.confNewIfc $node $ifc
 # FUNCTION
 #   Configures new interface for the specified node.
 # INPUTS
@@ -63,11 +63,11 @@ proc $MODULE.confNewIfc { node ifc } {
     autoIPv6defaultroute $node $ifc
 }
 
-#****f* pc.tcl/pc.confNewNode
+#****f* qemu.tcl/qemu.confNewNode
 # NAME
-#   pc.confNewNode -- configure new node
+#   qemu.confNewNode -- configure new node
 # SYNOPSIS
-#   pc.confNewNode $node
+#   qemu.confNewNode $node
 # FUNCTION
 #   Configures new node with the specified id.
 # INPUTS
@@ -78,7 +78,7 @@ proc $MODULE.confNewNode { node } {
     global nodeNamingBase
 
     set nconfig [list \
-	"hostname [getNewNodeNameType Qemu $nodeNamingBase(pc)]" \
+	"hostname [getNewNodeNameType qemu $nodeNamingBase(qemu)]" \
 	! ]
     lappend $node "network-config [list $nconfig]"
 
@@ -87,11 +87,11 @@ proc $MODULE.confNewNode { node } {
     setIfcIPv6addr $node lo0 "::1/128"
 }
 
-#****f* pc.tcl/pc.icon
+#****f* qemu.tcl/qemu.icon
 # NAME
-#   pc.icon -- icon
+#   qemu.icon -- icon
 # SYNOPSIS
-#   pc.icon $size
+#   qemu.icon $size
 # FUNCTION
 #   Returns path to node icon, depending on the specified size.
 # INPUTS
@@ -103,36 +103,36 @@ proc $MODULE.icon { size } {
     global ROOTDIR LIBDIR
     switch $size {
       normal {
-	return $ROOTDIR/$LIBDIR/icons/normal/Qemu.gif
+	return $ROOTDIR/$LIBDIR/icons/normal/qemu.gif
       }
       small {
-	return $ROOTDIR/$LIBDIR/icons/small/Qemu.gif
+	return $ROOTDIR/$LIBDIR/icons/small/qemu.gif
       }
       toolbar {
-	return $ROOTDIR/$LIBDIR/icons/tiny/Qemu.gif
+	return $ROOTDIR/$LIBDIR/icons/tiny/qemu.gif
       }
     }
 }
 
-#****f* pc.tcl/pc.toolbarIconDescr
+#****f* qemu.tcl/qemu.toolbarIconDescr
 # NAME
-#   pc.toolbarIconDescr -- toolbar icon description
+#   qemu.toolbarIconDescr -- toolbar icon description
 # SYNOPSIS
-#   pc.toolbarIconDescr
+#   qemu.toolbarIconDescr
 # FUNCTION
 #   Returns this module's toolbar icon description.
 # RESULT
 #   * descr -- string describing the toolbar icon
 #****
 proc $MODULE.toolbarIconDescr {} {
-    return "Add new Qemu"
+    return "Add new qemu"
 }
 
-#****f* pc.tcl/pc.notebookDimensions
+#****f* qemu.tcl/qemu.notebookDimensions
 # NAME
-#   pc.notebookDimensions -- notebook dimensions
+#   qemu.notebookDimensions -- notebook dimensions
 # SYNOPSIS
-#   pc.notebookDimensions $wi
+#   qemu.notebookDimensions $wi
 # FUNCTION
 #   Returns the specified notebook height and width.
 # INPUTS
@@ -158,13 +158,13 @@ proc $MODULE.notebookDimensions { wi } {
     return [list $h $w]
 }
 
-#****f* pc.tcl/pc.ifcName
+#****f* qemu.tcl/qemu.ifcName
 # NAME
-#   pc.ifcName -- interface name
+#   qemu.ifcName -- interface name
 # SYNOPSIS
-#   pc.ifcName
+#   qemu.ifcName
 # FUNCTION
-#   Returns pc interface name prefix.
+#   Returns qemu interface name prefix.
 # RESULT
 #   * name -- name prefix string
 #****
@@ -172,27 +172,27 @@ proc $MODULE.ifcName {l r} {
     return [l3IfcName $l $r]
 }
 
-#****f* pc.tcl/pc.IPAddrRange
+#****f* qemu.tcl/qemu.IPAddrRange
 # NAME
-#   pc.IPAddrRange -- IP address range
+#   qemu.IPAddrRange -- IP address range
 # SYNOPSIS
-#   pc.IPAddrRange
+#   qemu.IPAddrRange
 # FUNCTION
-#   Returns pc IP address range
+#   Returns qemu IP address range
 # RESULT
-#   * range -- pc IP address range
+#   * range -- qemu IP address range
 #****
 proc $MODULE.IPAddrRange {} {
     return 20
 }
 
-#****f* pc.tcl/pc.layer
+#****f* qemu.tcl/qemu.layer
 # NAME
-#   pc.layer -- layer
+#   qemu.layer -- layer
 # SYNOPSIS
-#   set layer [pc.layer]
+#   set layer [qemu.layer]
 # FUNCTION
-#   Returns the layer on which the pc communicates, i.e. returns NETWORK.
+#   Returns the layer on which the qemu communicates, i.e. returns NETWORK.
 # RESULT
 #   * layer -- set to NETWORK
 #****
@@ -200,33 +200,33 @@ proc $MODULE.layer {} {
     return NETWORK
 }
 
-#****f* pc.tcl/pc.virtlayer
+#****f* qemu.tcl/qemu.virtlayer
 # NAME
-#   pc.virtlayer -- virtual layer
+#   qemu.virtlayer -- virtual layer
 # SYNOPSIS
-#   set layer [pc.virtlayer]
+#   set layer [qemu.virtlayer]
 # FUNCTION
-#   Returns the layer on which the pc is instantiated i.e. returns VIMAGE.
+#   Returns the layer on which the qemu is instantiated i.e. returns VIMAGE.
 # RESULT
 #   * layer -- set to VIMAGE
 #****
 proc $MODULE.virtlayer {} {
-    return VIMAGE
+    return QEMU
 }
 
-#****f* pc.tcl/pc.cfggen
+#****f* qemu.tcl/qemu.cfggen
 # NAME
-#   pc.cfggen -- configuration generator
+#   qemu.cfggen -- configuration generator
 # SYNOPSIS
-#   set config [pc.cfggen $node]
+#   set config [qemu.cfggen $node]
 # FUNCTION
 #   Returns the generated configuration. This configuration represents
 #   the configuration loaded on the booting time of the virtual nodes
-#   and it is closly related to the procedure pc.bootcmd.
+#   and it is closly related to the procedure qemu.bootcmd.
 #   For each interface in the interface list of the node, ip address is
 #   configured and each static route from the simulator is added.
 # INPUTS
-#   * node -- node id (type of the node is pc)
+#   * node -- node id (type of the node is qemu)
 # RESULT
 #   * congif -- generated configuration
 #****
@@ -242,17 +242,17 @@ proc $MODULE.cfggen { node } {
     return $cfg
 }
 
-#****f* pc.tcl/pc.bootcmd
+#****f* qemu.tcl/qemu.bootcmd
 # NAME
-#   pc.bootcmd -- boot command
+#   qemu.bootcmd -- boot command
 # SYNOPSIS
-#   set appl [pc.bootcmd $node]
+#   set appl [qemu.bootcmd $node]
 # FUNCTION
 #   Procedure bootcmd returns the application that reads and employes the
-#   configuration generated in pc.cfggen.
-#   In this case (procedure pc.bootcmd) specific application is /bin/sh
+#   configuration generated in qemu.cfggen.
+#   In this case (procedure qemu.bootcmd) specific application is /bin/sh
 # INPUTS
-#   * node -- node id (type of the node is pc)
+#   * node -- node id (type of the node is qemu)
 # RESULT
 #   * appl -- application that reads the configuration (/bin/sh)
 #****
@@ -263,92 +263,92 @@ proc $MODULE.bootcmd { node } {
     return "/bin/sh"
 }
 
-#****f* pc.tcl/pc.shellcmds
+#****f* qemu.tcl/qemu.shellcmds
 # NAME
-#   pc.shellcmds -- shell commands
+#   qemu.shellcmds -- shell commands
 # SYNOPSIS
-#   set shells [pc.shellcmds]
+#   set shells [qemu.shellcmds]
 # FUNCTION
 #   Procedure shellcmds returns the shells that can be opened
 #   as a default shell for the system.
 # RESULT
-#   * shells -- default shells for the pc node
+#   * shells -- default shells for the qemu node
 #****
 proc $MODULE.shellcmds {} {
     return "csh bash sh tcsh"
 }
 
-#****f* pc.tcl/pc.instantiate
+#****f* qemu.tcl/qemu.instantiate
 # NAME
-#   pc.instantiate -- instantiate
+#   qemu.instantiate -- instantiate
 # SYNOPSIS
-#   pc.instantiate $eid $node
+#   qemu.instantiate $eid $node
 # FUNCTION
 #   Procedure instantiate creates a new virtaul node
 #   for a given node in imunes.
-#   Procedure pc.instantiate cretaes a new virtual node with
+#   Procedure qemu.instantiate cretaes a new virtual node with
 #   all the interfaces and CPU parameters as defined in imunes.
 # INPUTS
 #   * eid -- experiment id
-#   * node -- node id (type of the node is pc)
+#   * node -- node id (type of the node is qemu)
 #****
 proc $MODULE.instantiate { eid node } {
-    l3node.instantiate $eid $node
+    l3node.instantiateQemu $eid $node
 }
 
-#****f* pc.tcl/pc.start
+#****f* qemu.tcl/qemu.start
 # NAME
-#   pc.start -- start
+#   qemu.start -- start
 # SYNOPSIS
-#   pc.start $eid $node
+#   qemu.start $eid $node
 # FUNCTION
-#   Starts a new pc. The node can be started if it is instantiated.
-#   Simulates the booting proces of a pc, by calling l3node.start procedure.
+#   Starts a new qemu. The node can be started if it is instantiated.
+#   Simulates the booting proces of a qemu, by calling l3node.start procedure.
 # INPUTS
 #   * eid -- experiment id
-#   * node -- node id (type of the node is pc)
+#   * node -- node id (type of the node is qemu)
 #****
 proc $MODULE.start { eid node } {
     l3node.start $eid $node
 }
 
-#****f* pc.tcl/pc.shutdown
+#****f* qemu.tcl/qemu.shutdown
 # NAME
-#   pc.shutdown -- shutdown
+#   qemu.shutdown -- shutdown
 # SYNOPSIS
-#   pc.shutdown $eid $node
+#   qemu.shutdown $eid $node
 # FUNCTION
-#   Shutdowns a pc. Simulates the shutdown proces of a pc,
+#   Shutdowns a qemu. Simulates the shutdown proces of a qemu,
 #   by calling the l3node.shutdown procedure.
 # INPUTS
 #   * eid -- experiment id
-#   * node -- node id (type of the node is pc)
+#   * node -- node id (type of the node is qemu)
 #****
 proc $MODULE.shutdown { eid node } {
     l3node.shutdown $eid $node
 }
 
-#****f* pc.tcl/pc.destroy
+#****f* qemu.tcl/qemu.destroy
 # NAME
-#   pc.destroy -- destroy
+#   qemu.destroy -- destroy
 # SYNOPSIS
-#   pc.destroy $eid $node
+#   qemu.destroy $eid $node
 # FUNCTION
-#   Destroys a pc. Destroys all the interfaces of the pc
+#   Destroys a qemu. Destroys all the interfaces of the qemu
 #   and the vimage itself by calling l3node.destroy procedure.
 # INPUTS
 #   * eid -- experiment id
-#   * node -- node id (type of the node is pc)
+#   * node -- node id (type of the node is qemu)
 #****
 proc $MODULE.destroy { eid node } {
     l3node.destroy $eid $node
 }
 
-#****f* pc.tcl/pc.nghook
+#****f* qemu.tcl/qemu.nghook
 # NAME
-#   pc.nghook -- nghook
+#   qemu.nghook -- nghook
 # SYNOPSIS
-#   pc.nghook $eid $node $ifc
+#   qemu.nghook $eid $node $ifc
 # FUNCTION
 #   Returns the id of the netgraph node and the name of the netgraph hook
 #   which is used for connecting two netgraph nodes. This procedure calls
@@ -365,34 +365,13 @@ proc $MODULE.nghook { eid node ifc } {
     return [l3node.nghook $eid $node $ifc]
 }
 
-
-
-
-proc launchQEMU {memory disk cpus} {
-    set cmd "qemu-system-x86_64 -m $memory -drive file=$disk -smp $cpus"
-    exec $cmd &
-
-# ici on ajoute les code qui font que les interface se connect
-}
-
-# Function to open file dialog and set selected disk image
-proc selectDisk {} {
-    set selectedDisk [tk_getOpenFile -filetypes {{"Disk Images" {.img .iso}}}]
-    if {$selectedDisk ne ""} {
-        .diskEntry delete 0 end
-        .diskEntry insert 0 $selectedDisk
-    }
-}
-
-
-
-#****f* pc.tcl/pc.configGUI
+#****f* qemu.tcl/qemu.configGUI
 # NAME
-#   pc.configGUI -- configuration GUI
+#   qemu.configGUI -- configuration GUI
 # SYNOPSIS
-#   pc.configGUI $c $node
+#   qemu.configGUI $c $node
 # FUNCTION
-#   Defines the structure of the pc configuration window by calling
+#   Defines the structure of the qemu configuration window by calling
 #   procedures for creating and organising the window, as well as
 #   procedures for adding certain modules to that window.
 # INPUTS
@@ -400,45 +379,39 @@ proc selectDisk {} {
 #   * node -- node id
 #****
 proc $MODULE.configGUI { c node } {
-wm title . "QEMU Interface"
-label .memLabel -text "Memory (MB):"
-entry .memEntry -width 10
-label .diskLabel -text "Disk Image:"
-entry .diskEntry -width 30
-button .browseBtn -text "Browse" -command selectDisk
-label .cpuLabel -text "CPUs:"
-entry .cpuEntry -width 5
+    global wi
+    global guielements treecolumns
+    set guielements {}
 
-button .launchBtn -text "Launch QEMU" -command {
-    set memory [string trim [.memEntry get]]
-    set disk [string trim [.diskEntry get]]
-    set cpus [string trim [.cpuEntry get]]
-    if {$memory eq "" || $disk eq "" || $cpus eq ""} {
-        tk_messageBox -title "Error" -message "Please fill in all fields."
-    } else {
-        launchQEMU $memory $disk $cpus
-    }
+    configGUI_createConfigPopupWin $c
+    wm title $wi "qemu configuration"
+    configGUI_nodeName $wi $node "Node name:"
+
+    set tabs [configGUI_addNotebook $wi $node {"Configuration" "Interfaces"}]
+    set configtab [lindex $tabs 0]
+    set ifctab [lindex $tabs 1]
+
+    set treecolumns {"OperState State" "IPv4addr IPv4 addr" "IPv6addr IPv6 addr" \
+	    "MACaddr MAC addr" "MTU MTU" "QLen Queue len" "QDisc Queue disc" "QDrop Queue drop"}
+    configGUI_addTree $ifctab $node
+
+    configGUI_qemuImage $configtab $node
+    configGUI_qemuIso $configtab $node
+    configGUI_qemuBootType $configtab $node
+    configGUI_qemuMemory $configtab $node
+    configGUI_qemuKvm $configtab $node
+
+    configGUI_buttonsACNode $wi $node
 }
 
-# Layout
-grid .memLabel -row 0 -column 0 -sticky e
-grid .memEntry -row 0 -column 1 -sticky w
-grid .diskLabel -row 1 -column 0 -sticky e
-grid .diskEntry -row 1 -column 1 -sticky w
-grid .browseBtn -row 1 -column 2
-grid .cpuLabel -row 2 -column 0 -sticky e
-grid .cpuEntry -row 2 -column 1 -sticky w
-grid .launchBtn -row 3 -columnspan 3
-}
-
-#****f* pc.tcl/pc.configInterfacesGUI
+#****f* qemu.tcl/qemu.configInterfacesGUI
 # NAME
-#   pc.configInterfacesGUI -- configuration of interfaces GUI
+#   qemu.configInterfacesGUI -- configuration of interfaces GUI
 # SYNOPSIS
-#   pc.configInterfacesGUI $wi $node $ifc
+#   qemu.configInterfacesGUI $wi $node $ifc
 # FUNCTION
 #   Defines which modules for changing interfaces parameters are contained in
-#   the pc configuration window. It is done by calling procedures for adding
+#   the qemu configuration window. It is done by calling procedures for adding
 #   certain modules to the window.
 # INPUTS
 #   * wi -- widget

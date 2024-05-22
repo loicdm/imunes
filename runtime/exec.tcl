@@ -269,7 +269,7 @@ proc spawnShellExec {} {
           
 
        # set type [nodeType $node]
-       # if { $type == "router.quagga" } {
+       # if { $type == "router.frr" } {
        # set cmd "/bin/vtysh"
        # }
 	# if { [[typemodel $node].virtlayer] == "NAMESPACE"  } {
@@ -858,7 +858,7 @@ proc l3node.instantiate { eid node } {
     createNodeLogIfcs $node
     configureICMPoptions $node
 # Modification for save.tcl
-   configureVTYSHquagga $eid $node
+   configureVTYSHfrr $eid $node
 }
 
 # modification for namespace by adding new function
@@ -901,6 +901,13 @@ proc l3node.instantiateSTA { eid node } {
     createNodeLogIfcs $node
 #    configureICMPoptions $node
 }
+
+proc l3node.instantiateQemu { eid node } {
+    prepareFilesystemForNode $node
+    createNodeQemu $node
+    createNodePhysIfcs $node
+    createNodeLogIfcs $node
+}
 #****f* exec.tcl/l3node.start
 # NAME
 #   l3node.start -- layer 3 node start
@@ -936,7 +943,9 @@ if {$type == "routeur"} {
 
 } elseif {$type == "wifiSTA"} {
    runConfOnNodeSTA $node
-} else {
+} elseif {$type == "qemu"} {
+      
+}  else {
     startIfcsNode $node
     runConfOnNode $node
 }

@@ -572,6 +572,36 @@ proc createNodeContainer { node } {
 
 }
 
+#****f* linux.tcl/createNodeQemu
+# NAME
+#   createNodeQemu -- creates a virtual node container
+# SYNOPSIS
+#   createNodeContainer $node
+# FUNCTION
+#   Creates a docker instance using the defined template and
+#   assigns the hostname. Waits for the node to be up.
+# INPUTS
+#   * node -- node id
+#****
+proc createNodeQemu { node } {
+    upvar 0 ::cf::[set ::curcfg]::eid eid    
+    set node_id "$eid.$node"
+
+    set image [getNodeqemuImage $node]
+    set memory [getNodeqemuMemory $node]
+    set bootType [getNodeqemuBootType $node]
+    set iso [getNodeqemuIso $node]
+    set kvm [getNodeqemuKvm $node]
+  if {$bootType == 0} {
+    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap -display none -vga qxl -vnc :0 -k fr -qmp unix:/tmp/qmp-sock,server,wait=off $kvm -daemonize"
+  } else {
+    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap -display none -vga qxl -vnc :0 -k fr -qmp unix:/tmp/qmp-sock,server,wait=off -cdrom $iso -boot order=d $kvm -daemonize" 
+  }
+puts $command
+catch { eval exec $command }
+}
+
+
 proc createNodeContainerN { node } {
 
  upvar 0 ::cf::[set ::curcfg]::eid eid
