@@ -2107,14 +2107,14 @@ proc configGUI_qemuKvm { wi node } {
     pack $w.label -side left -padx 2
 
     # Radio button for selecting image type
-    set radioVar 0
-    ttk::radiobutton $w.radioDisk -text "Enable" -variable radioVar -value "-accel kvm"
-    ttk::radiobutton $w.radioIso -text "Disable" -variable radioVar -value ""
+    set kvm 0
+    ttk::radiobutton $w.radioDisk -text "Enable" -variable kvm -value "-accel kvm"
+    ttk::radiobutton $w.radioIso -text "Disable" -variable kvm -value ""
     pack $w.radioDisk -side left -padx 7
     pack $w.radioIso -side left -padx 7
 
     pack $w -fill both
-    set $w.kvm $radioVar
+    set $w.kvm $kvm
 }
 
 #****f* nodecfgGUI.tcl/configGUI_cpuConfig
@@ -2997,7 +2997,7 @@ proc configGUI_qemuBootTypeApply { wi node } {
 }
 
 proc configGUI_qemuKvmApply { wi node } {
-    upvar #0 bootType qemu_kvm
+    upvar #0 kvm qemu_kvm
     upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
     if { $oper_mode == "edit"} {
         if { [getNodeqemuKvm $node] != $qemu_kvm } {
