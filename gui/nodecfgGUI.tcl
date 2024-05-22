@@ -2032,7 +2032,7 @@ proc browseQemuIso {entryWidget} {
 }
 
 
-proc configGUI_qemuImageType { wi node } {
+proc configGUI_qemuBootType { wi node } {
     global VROOT_MASTER isOSlinux
 
     if { !$isOSlinux } {
@@ -2043,23 +2043,23 @@ proc configGUI_qemuImageType { wi node } {
     global guielements
     lappend guielements configGUI_qemuImageType
 
-    set qemu_image_type [getNodeqemuImageType $node]
+    set qemu_boot_type [getNodeqemuBootype $node]
 
-    set w $wi.qemuImgType
+    set w $wi.qemuBootType
     ttk::frame $w -relief groove -borderwidth 2 -padding 2
-    ttk::label $w.label -text "QEMU Image Type:"
+    ttk::label $w.label -text "QEMU Boot Type:"
 
     pack $w.label -side left -padx 2
 
     # Radio button for selecting image type
-    set radioVar 0
-    ttk::radiobutton $w.radioDisk -text "Disk Image" -variable radioVar -value 0
-    ttk::radiobutton $w.radioIso -text "ISO File" -variable radioVar -value 1
+    set bootType 0
+    ttk::radiobutton $w.radioDisk -text "Disk Image" -variable bootType -value 0
+    ttk::radiobutton $w.radioIso -text "ISO File" -variable bootType -value 1
     pack $w.radioDisk -side left -padx 7
     pack $w.radioIso -side left -padx 7
 
     pack $w -fill both
-    set $w.imgType $radioVar
+    set $w.bootType $bootType
 }
 
 proc configGUI_qemuMemory { wi node } {
@@ -2984,24 +2984,13 @@ proc configGUI_qemuIsoApply { wi node } {
     }
 }
 
-#****f* nodecfgGUI.tcl/configGUI_qemuImageTypeApply
-# NAME
-#   configGUI_qemuImageTypeApply -- configure GUI - qemu image apply
-# SYNOPSIS
-#   configGUI_qemuImageTypeApply $wi $node
-# FUNCTION
-#   Saves changes in the module with different qemuImageType
-# INPUTS
-#   * wi -- widget
-#   * node -- node id
-#****
 
-proc configGUI_qemuImageTypeApply { wi node } {
-    upvar #0 radioVar qemu_image_type
+proc configGUI_qemuBootTypeApply { wi node } {
+    upvar #0 bootType qemu_boot_type
     upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
     if { $oper_mode == "edit"} {
-        if { [getNodeqemuImageType $node] != $qemu_image_type } {
-            setNodeqemuImageType $node $qemu_image_type
+        if { [getNodeqemuBootType $node] != $qemu_boot_type } {
+            setNodeqemuBootType $node $qemu_boot_type
             set changed 1
         }
     }

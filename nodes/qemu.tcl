@@ -397,7 +397,7 @@ proc $MODULE.configGUI { c node } {
 
     configGUI_qemuImage $configtab $node
     #configGUI_qemuIso $configtab $node
-    configGUI_qemuImageType $configtab $node
+    configGUI_qemuBootType $configtab $node
     configGUI_qemuMemory $configtab $node
     configGUI_qemuKvm $configtab $node
 

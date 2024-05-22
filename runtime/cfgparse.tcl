@@ -491,8 +491,8 @@ proc loadCfg { cfg } {
 			    lappend $object "qemu-iso $value"
 			}
 
-			qemu-image-type {
-			    lappend $object "qemu-image-type $value"
+			qemu-boot-type {
+			    lappend $object "qemu-boot-type $value"
 			}
      qemu-kvm {
 			    lappend $object "qemu-kvm $value"

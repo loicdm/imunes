@@ -2813,7 +2813,7 @@ proc getNodeqemuIso { node } {
     return [lindex [lsearch -inline [set $node] "qemu-iso *"] 1]
 }
 
-proc setNodeqemuIso { node img } {
+proc setNodeqemuIso { node iso } {
     upvar 0 ::cf::[set ::curcfg]::$node $node
 
     set i [lsearch [set $node] "qemu-iso *"]
@@ -2826,21 +2826,21 @@ proc setNodeqemuIso { node img } {
 }
 
 
-proc getNodeqemuImageType { node } {
+proc getNodeqemuBootType { node } {
     upvar 0 ::cf::[set ::curcfg]::$node $node
 
-    return [lindex [lsearch -inline [set $node] "qemu-image-type *"] 1]
+    return [lindex [lsearch -inline [set $node] "qemu-boot-type *"] 1]
 }
 
-proc setNodeqemuImageType { node imgType } {
+proc setNodeqemuBootType { node bootType } {
     upvar 0 ::cf::[set ::curcfg]::$node $node
 
-    set i [lsearch [set $node] "qemu-image-type *"]
+    set i [lsearch [set $node] "qemu-boot-type *"]
     if { $i >= 0 } {
 	set $node [lreplace [set $node] $i $i]
     }
-    if { $imgType != "" } {
-	lappend $node [list qemu-image-type $imgType]
+    if { $bootType != "" } {
+	lappend $node [list qemu-boot-type $bootType]
     }
 }
 
@@ -2850,7 +2850,7 @@ proc getNodeqemuKvm { node } {
     return [lindex [lsearch -inline [set $node] "qemu-kvm *"] 1]
 }
 
-proc setNodeqemuKvm { node imgType } {
+proc setNodeqemuKvm { node kvm } {
     upvar 0 ::cf::[set ::curcfg]::$node $node
 
     set i [lsearch [set $node] "qemu-kvm *"]
@@ -2881,27 +2881,7 @@ proc setNodeqemuMemory { node mem } {
     }
 }
 
-proc getNodeqemuKvm { node } {
-    upvar 0 ::cf::[set ::curcfg]::$node $node
 
-    if { [lindex [lsearch -inline [set $node] "qemu-kvm *"] 1] == true } {
-	return true
-    } else {
-	return false
-    }
-}
-
-proc setNodeqemuKvm { node enabled } {
-    upvar 0 ::cf::[set ::curcfg]::$node $node
-
-    set i [lsearch [set $node] "qemu-kvm *"]
-    if { $i >= 0 } {
-	set $node [lreplace [set $node] $i $i]
-    }
-    if { $enabled == true } {
-	lappend $node [list qemu-kvm $enabled]
-    }
-}
 
 
 #****f* nodecfg.tcl/registerRouterModule
