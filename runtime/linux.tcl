@@ -585,19 +585,15 @@ proc createNodeContainer { node } {
 #****
 proc createNodeQemu { node } {
     upvar 0 ::cf::[set ::curcfg]::eid eid
-    global VROOT_MASTER ULIMIT_FILE ULIMIT_PROC debug
+    
     
     set node_id "$eid.$node"
 
 
 
-    set vroot [getNodeDockerImage $node]
-    if { $vroot == "" } {
-        set vroot $VROOT_MASTER
+    set image "/root/alpine.qcow2"
 
-    }
-
-    catch { exec qemu-system-x86_64 $vroot} 
+    catch { exec qemu-system-x86_64 $image} 
 
 
 }
