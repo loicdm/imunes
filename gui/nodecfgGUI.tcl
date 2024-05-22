@@ -1949,7 +1949,31 @@ proc configGUI_dockerImage { wi node } {
     pack $w -fill both
 }
 
+proc configGUI_qemuImage { wi node } {
+    global VROOT_MASTER isOSlinux
 
+    if { !$isOSlinux } {
+	return
+    }
+
+    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    global guielements
+    lappend guielements configGUI_qemuImage
+
+    set qemu_image [getNodeqemuImage $node]
+   
+    set w $wi.qemuImg
+    ttk::frame $w -relief groove -borderwidth 2 -padding 2
+    ttk::label $w.label -text "qemu image:"
+
+    pack $w.label -side left -padx 2
+
+    ttk::entry $w.img -width 40
+    $w.img insert 0 $qemu_image
+    pack $w.img -side left -padx 7
+
+    pack $w -fill both
+}
 
 proc configGUI_qemuImage { wi node } {
     global VROOT_MASTER isOSlinux
@@ -1979,11 +2003,11 @@ proc configGUI_qemuImage { wi node } {
 
 proc browseQemuImage {entryWidget} {
     # Open file dialog
-    set filename [tk_getOpenFile -title "Select QEMU Image" -filetypes {{"All Files" "*"} {"QEMU Image Files" "*.qcow2"}}]
+    set img [tk_getOpenFile -title "Select QEMU Image" -filetypes {{"All Files" "*"} {"QEMU Image Files" "*.qcow2"}}]
     # If a file was selected, insert the file path into the entry widget
-    if {$filename ne ""} {
+    if {$img ne ""} {
         $entryWidget delete 0 end
-        $entryWidget insert 0 $filename
+        $entryWidget insert 0 $img
     }
 }
 
