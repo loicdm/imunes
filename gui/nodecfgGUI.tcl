@@ -2010,7 +2010,7 @@ proc configGUI_qemuIso { wi node } {
     pack $w.label -side left -padx 2
 
     # Entry widget to show the selected file path
-    ttk::entry $w.img -width 40
+    ttk::entry $w.iso -width 40
     $w.iso insert 0 $qemu_iso
     pack $w.iso -side left -padx 7
 
