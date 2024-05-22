@@ -269,7 +269,7 @@ proc spawnShellExec {} {
           
 
        # set type [nodeType $node]
-       # if { $type == "router.quagga" } {
+       # if { $type == "router.frr" } {
        # set cmd "/bin/vtysh"
        # }
 	# if { [[typemodel $node].virtlayer] == "NAMESPACE"  } {
@@ -858,7 +858,7 @@ proc l3node.instantiate { eid node } {
     createNodeLogIfcs $node
     configureICMPoptions $node
 # Modification for save.tcl
-   configureVTYSHquagga $eid $node
+   configureVTYSHfrr $eid $node
 }
 
 # modification for namespace by adding new function

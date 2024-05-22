@@ -37,7 +37,7 @@ set bridgeProtocol rstp
 set brguielements {}
 set selectedFilterRule ""
 set selectedPackgenPacket ""
-set router_ConfigModel "quagga"
+set router_ConfigModel "frr"
 
 #****f* nodecfgGUI.tcl/nodeConfigGUI
 # NAME
@@ -1772,8 +1772,8 @@ proc configGUI_routingModel { wi node } {
     ttk::checkbutton $w.protocols.ripng -text "ripng" -variable ripngEnable
     ttk::checkbutton $w.protocols.ospf -text "ospfv2" -variable ospfEnable
     ttk::checkbutton $w.protocols.ospf6 -text "ospfv3" -variable ospf6Enable
-    ttk::radiobutton $w.model.quagga -text quagga \
-	-variable router_ConfigModel -value quagga -command \
+    ttk::radiobutton $w.model.frr -text frr \
+	-variable router_ConfigModel -value frr -command \
 	"$w.protocols.rip configure -state normal;
 	 $w.protocols.ripng configure -state normal;
 	 $w.protocols.ospf configure -state normal;
@@ -1804,7 +1804,7 @@ proc configGUI_routingModel { wi node } {
  	$w.protocols.ospf6 configure -state disabled
     }
     if { $oper_mode != "edit" } {
-	$w.model.quagga configure -state disabled
+	$w.model.frr configure -state disabled
 	$w.model.xorp configure -state disabled
 	$w.model.static configure -state disabled
 	$w.protocols.rip configure -state disabled
@@ -1816,7 +1816,7 @@ proc configGUI_routingModel { wi node } {
 	$w.model.xorp configure -state disabled
     }
     pack $w.model.label -side left -padx 2
-    pack $w.model.quagga $w.model.xorp $w.model.static \
+    pack $w.model.frr $w.model.xorp $w.model.static \
         -side left -padx 6
     pack $w.model -fill both -expand 1
     pack $w.protocols.label -side left -padx 2

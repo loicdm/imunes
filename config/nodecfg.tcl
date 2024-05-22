@@ -66,7 +66,7 @@
 #
 #
 # Routines for manipulation of per-node network configuration files
-# IMUNES keeps per-node network configuration in an IOS / Zebra / Quagga
+# IMUNES keeps per-node network configuration in an IOS / Zebra / frr
 # style format.
 #
 # Network configuration is embedded in each node's config section via the
@@ -1434,7 +1434,7 @@ proc nodeType { node } {
 #   set model [getNodeModel $node]
 # FUNCTION
 #   Returns node's optional routing model. Currently supported models are 
-#   quagga, xorp and static and only nodes of type router have a defined model.
+#   frr, xorp and static and only nodes of type router have a defined model.
 # INPUTS
 #   * node -- node id
 # RESULT
@@ -1453,7 +1453,7 @@ proc getNodeModel { node } {
 #   setNodeModel $node $model
 # FUNCTION
 #   Sets an optional routing model to the node. Currently supported models are
-#   quagga, xorp and static and only nodes of type router have a defined model.
+#   frr, xorp and static and only nodes of type router have a defined model.
 # INPUTS
 #   * node -- node id
 #   * model -- routing model of the specified node
@@ -2380,7 +2380,7 @@ proc setNodeType { node newtype } {
     } elseif { [lsearch "host pc" $oldtype] >= 0 \
 	    && $newtype == "router" } {
 	setType $node $newtype
-	setNodeModel $node "quagga"
+	setNodeModel $node "frr"
 	setNodeName $node $newtype[string range $node 1 end]
 	netconfClearSection $node "ip route *"
 	netconfClearSection $node "ipv6 route *"
@@ -3045,7 +3045,7 @@ proc transformNodes { nodes type } {
 		set nodecfg [lreplace $nodecfg $typeIndex $typeIndex "type $type"]
 
 		# set router model and default protocols
-		setNodeModel $node "quagga"
+		setNodeModel $node "frr"
 		setNodeProtocolRip $node 1
 		setNodeProtocolRipng $node 1
 		# clear default static routes
