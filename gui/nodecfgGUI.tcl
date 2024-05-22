@@ -1990,6 +1990,8 @@ proc browseQemuImage {entryWidget} {
     }
 }
 
+
+
 proc configGUI_qemuImageType { wi node } {
     global VROOT_MASTER isOSlinux
 
@@ -2005,7 +2007,7 @@ proc configGUI_qemuImageType { wi node } {
 
     set w $wi.qemuImgType
     ttk::frame $w -relief groove -borderwidth 2 -padding 2
-    ttk::label $w.label -text "qemu image type:"
+    ttk::label $w.label -text "QEMU Image Type:"
 
     pack $w.label -side left -padx 2
 
@@ -2019,8 +2021,10 @@ proc configGUI_qemuImageType { wi node } {
     pack $w -fill both
 
     # Initialize the image type variable
-    set $w.imgType $qemu_image_type
+    set ::imgType($w) $qemu_image_type
 }
+
+
 
 
 proc configGUI_qemuMemory { wi node } {
