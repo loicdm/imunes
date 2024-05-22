@@ -2010,13 +2010,13 @@ proc configGUI_qemuImageType { wi node } {
     pack $w.label -side left -padx 2
 
     # Radio button for selecting image type
-    set imgType($w) $qemu_image_type
-    ttk::radiobutton $w.radioDisk -text "Disk Image" -variable imgType($w) -value 0
-    ttk::radiobutton $w.radioIso -text "ISO File" -variable imgType($w) -value 1
+    ttk::radiobutton $w.radioDisk -text "Disk Image" -variable $w.imgType -value 0
+    ttk::radiobutton $w.radioIso -text "ISO File" -variable $w.imgType -value 1
     pack $w.radioDisk -side left -padx 7
     pack $w.radioIso -side left -padx 7
 
     pack $w -fill both
+    puts $w.imgType
 }
 
 proc configGUI_qemuMemory { wi node } {
