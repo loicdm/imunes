@@ -597,7 +597,7 @@ proc createNodeQemu { node } {
 
     }
 
-    catch { exec qemu-system-x86_64 -m 1024 -hda $vroot } 
+    catch { exec qemu-system-x86_64} 
 
 
 }
