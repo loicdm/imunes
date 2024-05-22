@@ -1990,6 +1990,48 @@ proc browseQemuImage {entryWidget} {
     }
 }
 
+proc configGUI_qemuIso { wi node } {
+    global VROOT_MASTER isOSlinux
+
+    if { !$isOSlinux } {
+        return
+    }
+
+    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    global guielements
+    lappend guielements configGUI_qemuIso
+
+    set qemu_iso [getNodeqemuIso $node]
+
+    set w $wi.qemuIso
+    ttk::frame $w -relief groove -borderwidth 2 -padding 2
+    ttk::label $w.label -text "qemu iso:"
+
+    pack $w.label -side left -padx 2
+
+    # Entry widget to show the selected file path
+    ttk::entry $w.img -width 40
+    $w.iso insert 0 $qemu_iso
+    pack $w.iso -side left -padx 7
+
+    # File browse button
+    ttk::button $w.browse -text "Browse..." -command [list browseQemuIso $w.iso]
+    pack $w.browse -side left -padx 7
+
+    pack $w -fill both
+}
+
+proc browseQemuIso {entryWidget} {
+    # Open file dialog
+    set filename [tk_getOpenFile -title "Select Iso" -filetypes {{"All Files" "*"} {"Iso Files" "*.iso"}}]
+    # If a file was selected, insert the file path into the entry widget
+    if {$filename ne ""} {
+        $entryWidget delete 0 end
+        $entryWidget insert 0 $filename
+    }
+}
+
+
 proc configGUI_qemuImageType { wi node } {
     global VROOT_MASTER isOSlinux
 
@@ -2044,6 +2086,35 @@ proc configGUI_qemuMemory { wi node } {
     pack $w.mem -side left -padx 7
 
     pack $w -fill both
+}
+proc configGUI_qemuKvm { wi node } {
+    global VROOT_MASTER isOSlinux
+
+    if { !$isOSlinux } {
+        return
+    }
+
+    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    global guielements
+    lappend guielements configGUI_qemuImageType
+
+    set qemu_kvm [getNodeqemuKvm $node]
+
+    set w $wi.qemuKvm
+    ttk::frame $w -relief groove -borderwidth 2 -padding 2
+    ttk::label $w.label -text "QEMU kvm Type:"
+
+    pack $w.label -side left -padx 2
+
+    # Radio button for selecting image type
+    set radioVar 0
+    ttk::radiobutton $w.radioDisk -text "Enable" -variable radioVar -value "-accel kvm"
+    ttk::radiobutton $w.radioIso -text "Disable" -variable radioVar -value ""
+    pack $w.radioDisk -side left -padx 7
+    pack $w.radioIso -side left -padx 7
+
+    pack $w -fill both
+    set $w.kvm $radioVar
 }
 
 #****f* nodecfgGUI.tcl/configGUI_cpuConfig
@@ -2902,6 +2973,16 @@ proc configGUI_qemuImageApply { wi node } {
     }
 }
 
+proc configGUI_qemuIsoApply { wi node } {
+    upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
+    set qemu_iso [$wi.qemuIso.iso get]
+    if { $oper_mode == "edit"} {
+	if { [getNodeqemuIso $node] != $qemu_iso } {
+	    setNodeqemuIso $node $qemu_iso
+	    set changed 1
+	}
+    }
+}
 
 #****f* nodecfgGUI.tcl/configGUI_qemuImageTypeApply
 # NAME
@@ -2917,11 +2998,7 @@ proc configGUI_qemuImageApply { wi node } {
 
 proc configGUI_qemuImageTypeApply { wi node } {
     upvar #0 radioVar qemu_image_type
-
-    puts $qemu_image_type
-
     upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
-
     if { $oper_mode == "edit"} {
         if { [getNodeqemuImageType $node] != $qemu_image_type } {
             setNodeqemuImageType $node $qemu_image_type

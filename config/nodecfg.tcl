@@ -2807,6 +2807,24 @@ proc setNodeqemuImage { node img } {
 	lappend $node [list qemu-image $img]
     }
 }
+proc getNodeqemuIso { node } {
+    upvar 0 ::cf::[set ::curcfg]::$node $node
+
+    return [lindex [lsearch -inline [set $node] "qemu-iso *"] 1]
+}
+
+proc setNodeqemuIso { node img } {
+    upvar 0 ::cf::[set ::curcfg]::$node $node
+
+    set i [lsearch [set $node] "qemu-iso *"]
+    if { $i >= 0 } {
+	set $node [lreplace [set $node] $i $i]
+    }
+    if { $iso != "" } {
+	lappend $node [list qemu-iso $iso]
+    }
+}
+
 
 proc getNodeqemuImageType { node } {
     upvar 0 ::cf::[set ::curcfg]::$node $node
@@ -2825,6 +2843,25 @@ proc setNodeqemuImageType { node imgType } {
 	lappend $node [list qemu-image-type $imgType]
     }
 }
+
+proc getNodeqemuKvm { node } {
+    upvar 0 ::cf::[set ::curcfg]::$node $node
+
+    return [lindex [lsearch -inline [set $node] "qemu-kvm *"] 1]
+}
+
+proc setNodeqemuKvm { node imgType } {
+    upvar 0 ::cf::[set ::curcfg]::$node $node
+
+    set i [lsearch [set $node] "qemu-kvm *"]
+    if { $i >= 0 } {
+	set $node [lreplace [set $node] $i $i]
+    }
+    if { $kvm != "" } {
+	lappend $node [list qemu-kvm $kvm]
+    }
+}
+
 
 proc getNodeqemuMemory { node } {
     upvar 0 ::cf::[set ::curcfg]::$node $node
