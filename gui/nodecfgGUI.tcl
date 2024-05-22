@@ -1995,9 +1995,9 @@ proc configGUI_qemuMemory { wi node } {
 
     pack $w.label -side left -padx 2
 
-    ttk::entry $w.img -width 40
+    ttk::entry $w.mem -width 40
     $w.img insert 0 $qemu_memory
-    pack $w.img -side left -padx 7
+    pack $w.mem -side left -padx 7
 
     pack $w -fill both
 }
