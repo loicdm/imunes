@@ -2010,13 +2010,15 @@ proc configGUI_qemuImageType { wi node } {
     pack $w.label -side left -padx 2
 
     # Radio button for selecting image type
-    ttk::radiobutton $w.radioDisk -text "Disk Image" -variable $w.imgType -value 0
-    ttk::radiobutton $w.radioIso -text "ISO File" -variable $w.imgType -value 1
+    set radioVar 0
+    ttk::radiobutton $w.radioDisk -text "Disk Image" -variable radioVar -value 0
+    ttk::radiobutton $w.radioIso -text "ISO File" -variable radioVar -value 1
     pack $w.radioDisk -side left -padx 7
     pack $w.radioIso -side left -padx 7
 
     pack $w -fill both
-    puts $w.imgType
+    puts $radioVar
+    set $w.imgType $radioVar
 }
 
 proc configGUI_qemuMemory { wi node } {
@@ -2892,7 +2894,6 @@ proc configGUI_dockerImageApply { wi node } {
 #****
 proc configGUI_qemuImageApply { wi node } {
     upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
-    puts $wi.qemuImg.img
     set qemu_image [$wi.qemuImg.img get]
     if { $oper_mode == "edit"} {
 	if { [getNodeqemuImage $node] != $qemu_image } {
@@ -2916,7 +2917,6 @@ proc configGUI_qemuImageApply { wi node } {
 #****
 proc configGUI_qemuImageTypeApply { wi node } {
     upvar 0 ::cf::[set ::curcfg]::oper_mode oper_mode
-    puts $wi.qemuImgType.imgType
     set qemu_image_type $wi.qemuImgType.imgType
     if { $oper_mode == "edit"} {
 	if { [getNodeqemuImageType $node] != $qemu_image_type } {
