@@ -2011,8 +2011,8 @@ proc configGUI_qemuImageType { wi node } {
 
     # Radio button for selecting image type
     set imgType $qemu_image_type
-    ttk::radiobutton $w.radioDisk -text "Disk Image" -variable imgType -value 0 -command [list setImageType $wi.imgType $imgType]
-    ttk::radiobutton $w.radioIso -text "ISO File" -variable imgType -value 1 -command [list setImageType $wi.imgType $imgType]
+    ttk::radiobutton $w.radioDisk -text "Disk Image" -variable imgType -value 0
+    ttk::radiobutton $w.radioIso -text "ISO File" -variable imgType -value 1
     pack $w.radioDisk -side left -padx 7
     pack $w.radioIso -side left -padx 7
 
