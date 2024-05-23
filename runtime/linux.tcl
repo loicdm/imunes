@@ -593,9 +593,9 @@ proc createNodeQemu { node } {
     set iso [getNodeqemuIso $node]
     set kvm [getNodeqemuKvm $node]
   if {$bootType == 0} {
-    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$node_id,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -qmp unix:/tmp/qmp-sock,server,wait=off $kvm -daemonize"
+    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$node_id,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -qmp unix:/tmp/qemu-sock-$node_id,server,wait=off $kvm -daemonize"
   } else {
-    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$node_id,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -qmp unix:/tmp/qmp-sock,server,wait=off -cdrom $iso -boot order=d $kvm -daemonize" 
+    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$node_id,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -qmp unix:/tmp/qemu-sock-$node_id,server,wait=off -cdrom $iso -boot order=d $kvm -daemonize" 
   }
 puts $command
 catch { eval exec $command }
@@ -1840,6 +1840,7 @@ proc killAllNodeProcesses { eid node } {
     set node_id "$eid.$node"
 
     catch "exec docker exec $node_id killall5 -o 1 -9"
+    catch "exec echo "quit" | socat - unix-connect:/tmp/qemu-sock-$node_id"
 }
 
 proc destroyVirtNodeIfcs { eid vimages } {}
@@ -2735,7 +2736,7 @@ proc startExternalIfc { eid node } {
 
     set ipv4 [getIfcIPv4addr $node $ifc]
     if {$ipv4 == ""} {
-       autoIPv4addr $node $ifc
+       al3node.destroy l3node.destroy utoIPv4addr $node $ifc
 
 
     }
