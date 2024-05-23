@@ -907,12 +907,11 @@ proc cleanupQEMU { node } {
     set id [split $node "n"]
     set id [lindex $id 1]
     catch { eval exec "ip link delete $eid-$node" }
-    catch {
+
         puts "trying to kill vm"
         set pid [eval exec "pgrep -f qemu-system-x86_64"]
         eval puts "qemu pid $pid"
         eval exec "kill -9 $pid"
-    }
 }
 
 
@@ -1963,11 +1962,7 @@ proc killAllNodeProcesses { eid node } {
     set node_id "$eid.$node"
 
     catch "exec docker exec $node_id killall5 -o 1 -9"
-    catch {
-        puts "trying to kill vm"
-        set pid [eval exec "pgrep -f qemu-system-x86_64"]
-        eval exec "kill -9 $pid"
-    }
+
 }
 
 proc destroyVirtNodeIfcs { eid vimages } {}
