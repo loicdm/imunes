@@ -1961,8 +1961,10 @@ proc killAllNodeProcesses { eid node } {
     set node_id "$eid.$node"
 
     catch "exec docker exec $node_id killall5 -o 1 -9"
-    catch eval "exec echo \"quit\" | socat - unix-connect:/tmp/qemu-sock-$node_id"
-
+    catch {
+        set pid [exec "pgrep -f qemu-system-x86_64"]
+        eval exec "kill -9 $pid"
+    }
 }
 
 proc destroyVirtNodeIfcs { eid vimages } {}
