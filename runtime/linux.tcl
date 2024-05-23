@@ -1962,7 +1962,8 @@ proc killAllNodeProcesses { eid node } {
 
     catch "exec docker exec $node_id killall5 -o 1 -9"
     catch {
-        set pid [exec "pgrep -f qemu-system-x86_64"]
+        puts "trying to kill vm"
+        set pid [eval exec "pgrep -f qemu-system-x86_64"]
         eval exec "kill -9 $pid"
     }
 }
