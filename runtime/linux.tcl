@@ -1840,6 +1840,7 @@ proc killAllNodeProcesses { eid node } {
     set node_id "$eid.$node"
 
     catch "exec docker exec $node_id killall5 -o 1 -9"
+    catch eval "exec echo \"quit\" | socat - unix-connect:/tmp/qemu-sock-$node_id"
 
 }
 
