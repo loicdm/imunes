@@ -900,6 +900,20 @@ proc cleanupSTA { node } {
    
 }
 
+proc cleanupQEMU { node } {
+    upvar 0 ::cf::[set ::curcfg]::eid eid
+    set node_id "$eid.$node"
+    set id [split $node "n"]
+    set id [lindex $id 1]
+    eval exec "ip link delete $eid-$node"
+
+
+
+
+
+}
+
+
 #Modification for wifi
 proc prepareAP { } {
 
