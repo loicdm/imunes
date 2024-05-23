@@ -369,6 +369,7 @@ if {[[typemodel $node].virtlayer] == "DYNAMIPS"} {
     #  nexec xterm -sb -rightbar \
     # -T "IMUNES: [getNodeName $node] -> $switchname" \
     # -e "$cmd" 2> /dev/null &
+    eval exec "remote-viewer spice+unix:///tmp/vm_spice-$eid.$node.socket"
 } elseif {[[typemodel $node].virtlayer] == "NETGRAPH"} {
 
      nexec xterm -sb -rightbar \
