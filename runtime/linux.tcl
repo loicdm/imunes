@@ -369,6 +369,7 @@ if {[[typemodel $node].virtlayer] == "DYNAMIPS"} {
     #  nexec xterm -sb -rightbar \
     # -T "IMUNES: [getNodeName $node] -> $switchname" \
     # -e "$cmd" 2> /dev/null &
+    # eval exec "remote-viewer spice+unix:///tmp/vm_spice-$eid.$node.socket"
 } elseif {[[typemodel $node].virtlayer] == "NETGRAPH"} {
 
      nexec xterm -sb -rightbar \
@@ -597,16 +598,17 @@ proc createNodeQemu { node } {
     set bootType [getNodeqemuBootType $node]
     set iso [getNodeqemuIso $node]
     set kvm [getNodeqemuKvm $node]
+    catch {
     eval exec "ip tuntap add dev $eid-$node mode tap"
     eval exec "ip link set dev $eid-$node up"
   if {$bootType == 0} {
-    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off $kvm -daemonize"
+    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -spice unix=on,addr=/tmp/vm_spice-$node_id.socket,disable-ticketing=on -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off $kvm -daemonize"
   } else {
-    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off -cdrom $iso -boot order=d $kvm -daemonize"
+    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -spice unix=on,addr=/tmp/vm_spice-$node_id.socket,disable-ticketing=on -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off -cdrom $iso -boot order=d $kvm -daemonize"
   }
     puts $command
-    catch { eval exec $command }
-
+    eval exec $command
+    }
 }
 
 
@@ -903,14 +905,17 @@ proc cleanupSTA { node } {
 proc cleanupQEMU { node } {
     upvar 0 ::cf::[set ::curcfg]::eid eid
     set node_id "$eid.$node"
+
     set id [split $node "n"]
     set id [lindex $id 1]
-    eval exec "ip link delete $eid-$node"
+    catch { eval exec "ip link delete $eid-$node" }
 
-
-
-
-
+    puts "trying to kill vm"
+    catch {
+    eval exec "killall qemu-system-x86_64"
+    eval exec "rm /tmp/qemu-sock-$node_id"
+    eval exec "rm /tmp/vm_spice-$node_id.socket"
+    }
 }
 
 
@@ -1961,11 +1966,7 @@ proc killAllNodeProcesses { eid node } {
     set node_id "$eid.$node"
 
     catch "exec docker exec $node_id killall5 -o 1 -9"
-    catch {
-        puts "trying to kill vm"
-        set pid [eval exec "pgrep -f qemu-system-x86_64"]
-        eval exec "kill -9 $pid"
-    }
+
 }
 
 proc destroyVirtNodeIfcs { eid vimages } {}
