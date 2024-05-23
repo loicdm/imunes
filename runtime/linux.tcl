@@ -910,8 +910,7 @@ proc cleanupQEMU { node } {
 
         puts "trying to kill vm"
         set pid [eval exec "pgrep -f qemu-system-x86_64"]
-        eval puts "qemu pid $pid"
-        eval exec "kill -9 $pid"
+        exec "kill -9 $pid"
 }
 
 
