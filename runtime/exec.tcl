@@ -255,7 +255,7 @@ proc spawnShellExec {} {
 
 
     if { [[typemodel $node].virtlayer] == "QEMU"} {
-        catch { eval exec "remote-viewer spice+unix:///tmp/vm_spice-$eid.$node.socket" }
+        catch { eval exec "remote-viewer spice+unix:///tmp/vm_spice-$eid.$node.socket &" }
         return
 
     }
