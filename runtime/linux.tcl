@@ -369,7 +369,7 @@ if {[[typemodel $node].virtlayer] == "DYNAMIPS"} {
     #  nexec xterm -sb -rightbar \
     # -T "IMUNES: [getNodeName $node] -> $switchname" \
     # -e "$cmd" 2> /dev/null &
-    eval exec "remote-viewer spice+unix:///tmp/vm_spice-$eid.$node.socket"
+    # eval exec "remote-viewer spice+unix:///tmp/vm_spice-$eid.$node.socket"
 } elseif {[[typemodel $node].virtlayer] == "NETGRAPH"} {
 
      nexec xterm -sb -rightbar \
@@ -907,11 +907,11 @@ proc cleanupQEMU { node } {
     set id [split $node "n"]
     set id [lindex $id 1]
     eval exec "ip link delete $eid-$node"
-
-
-
-
-
+    catch {
+        puts "trying to kill vm"
+        set pid [eval exec "pgrep -f qemu-system-x86_64"]
+        eval exec "kill -9 $pid"
+    }
 }
 
 
