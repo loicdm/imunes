@@ -1839,19 +1839,28 @@ proc removeNodeContainer { eid node } {
 proc killAllNodeProcesses { eid node } {
     set node_id "$eid.$node"
 
-    catch "exec docker exec $node_id killall5 -o 1 -9"
+ 
+set socket_path "/tmp/qemu-sock-$node_id"
 
-    set socket_path "/tmp/qemu-sock-$node_id"
+# Create a temporary file to hold the "quit" command
+set temp_file [open "temp_cmd.txt" "w"]
+puts $temp_file "quit"
+close $temp_file
 
-    # Open a pipe to socat
-    set pipe [open "|socat - unix-connect:$socket_path" w]
+# Execute the socat command using the temporary file
+set command [list socat - unix-connect:$socket_path]
+set pipe [open "|[join $command] < temp_cmd.txt" r]
 
-    # Write "quit" to the pipe
-    puts $pipe "quit"
+# Read and discard the output of the command (if any)
+while {[gets $pipe line] >= 0} {
+    puts $line
+}
 
-    # Flush and close the pipe
-    flush $pipe
-    close $pipe
+close $pipe
+
+# Cleanup the temporary file
+file delete "temp_cmd.txt"
+
 
 }
 
