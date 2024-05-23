@@ -1363,7 +1363,14 @@ foreach node $node_list {
      
 
         cleanupSTA $node
+	} elseif { [[typemodel $node].virtlayer] == "QEMU" } {
+
+           #Modification for wifi
+
+
+        cleanupQEMU $node
 	}
+
          
     }
 
@@ -1372,8 +1379,8 @@ foreach node $node_list {
     set namespace_li [exec ip netns list]
 
 	set namespace_list [split $namespace_li \n]
-
-	foreach namespa $namespace_list {
+catch {
+    	foreach namespa $namespace_list {
 
 			set name [split $namespa " "]
 
@@ -1384,13 +1391,16 @@ foreach node $node_list {
 			set namespace_pid_list [split $namespace_pid \n]
 
 					foreach pids_namesp $namespace_pid_list {
- 
+
 
 							catch "exec kill -9 $pids_namesp"
 
 					}
                         catch "exec rm -rf /etc/netns/$namespace_filtre"
 	}
+
+}
+
 
     catch "exec ip -all netns del"
 

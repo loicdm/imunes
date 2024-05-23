@@ -156,7 +156,7 @@ global dynacurdir
 
 
     if { $wiresharkComm != "" } {
-                  if {[[typemodel $node].virtlayer] == "NETGRAPH"} { 
+                  if {[[typemodel $node].virtlayer] == "NETGRAPH" || [[typemodel $node].virtlayer] == "QEMU"} {
 				catch "exec wireshark -ki $eid-$node-$ifc -o gui.window_title:$ifc@[getNodeName $node] &"
       		 } elseif {[[typemodel $node].virtlayer] == "NAMESPACE" || [[typemodel $node].virtlayer] == "WIFIAP" || [[typemodel $node].virtlayer] == "WIFISTA" } { 
                         if {([[typemodel $node].virtlayer] == "WIFIAP" || [[typemodel $node].virtlayer] == "WIFISTA") && $ifc == "hwsim0"} {
@@ -364,6 +364,11 @@ if {[[typemodel $node].virtlayer] == "DYNAMIPS"} {
     -T "IMUNES: [getNodeName $node] (console) [string trim [lindex [split $cmd /] end] ']" \
     -e "ip netns exec $node_id1 $cmd" 2> /dev/null &
    }
+}  elseif {[[typemodel $node].virtlayer] == "QEMU"} {
+
+    #  nexec xterm -sb -rightbar \
+    # -T "IMUNES: [getNodeName $node] -> $switchname" \
+    # -e "$cmd" 2> /dev/null &
 } elseif {[[typemodel $node].virtlayer] == "NETGRAPH"} {
 
      nexec xterm -sb -rightbar \
@@ -592,13 +597,16 @@ proc createNodeQemu { node } {
     set bootType [getNodeqemuBootType $node]
     set iso [getNodeqemuIso $node]
     set kvm [getNodeqemuKvm $node]
+    eval exec "ip tuntap add dev $eid-$node mode tap"
+    eval exec "ip link set dev $eid-$node up"
   if {$bootType == 0} {
-    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$node_id,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off $kvm -daemonize"
+    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off $kvm -daemonize"
   } else {
-    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$node_id,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off -cdrom $iso -boot order=d $kvm -daemonize" 
+    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off -cdrom $iso -boot order=d $kvm -daemonize"
   }
-puts $command
-catch { eval exec $command }
+    puts $command
+    catch { eval exec $command }
+
 }
 
 
@@ -892,6 +900,20 @@ proc cleanupSTA { node } {
    
 }
 
+proc cleanupQEMU { node } {
+    upvar 0 ::cf::[set ::curcfg]::eid eid
+    set node_id "$eid.$node"
+    set id [split $node "n"]
+    set id [lindex $id 1]
+    eval exec "ip link delete $eid-$node"
+
+
+
+
+
+}
+
+
 #Modification for wifi
 proc prepareAP { } {
 
@@ -1167,6 +1189,64 @@ proc createLinkBetween { lnode1 lnode2 ifname1 ifname2 } {
     set lname2 $lnode2
 
     switch -exact "[[typemodel $lnode1].virtlayer]-[[typemodel $lnode2].virtlayer]" {
+    QEMU-QEMU {
+        if { [nodeType $lnode1] == "ext" } {
+
+        catch "exec ovs-vsctl add-br $eid-$lnode1"
+        catch "exec ovs-vsctl set bridge $eid-$lnode1 stp_enable=true"
+        }
+        if { [nodeType $lnode2] == "ext" } {
+
+        catch "exec ovs-vsctl add-br $eid-$lnode2"
+        catch "exec ovs-vsctl set bridge $eid-$lnode2 stp_enable=true"
+        }
+
+        set hostIfc1 "$eid-$lname1-$ifname1"
+        set hostIfc2 "$eid-$lname2-$ifname2"
+
+        catch {exec ip link add name "$hostIfc1" type veth peer name "$hostIfc2"}
+
+        catch "exec ovs-vsctl add-port $eid-$lname1 $hostIfc1"
+        catch "exec ovs-vsctl add-port $eid-$lname2 $hostIfc2"
+        # set bridge interfaces up
+        exec ip link set dev $hostIfc1 up
+        exec ip link set dev $hostIfc2 up
+    }
+    QEMU-NETGRAPH {
+        if { [nodeType $lnode1] == "ext" } {
+
+        catch "exec ovs-vsctl add-br $eid-$lnode1"
+        catch "exec ovs-vsctl set bridge $eid-$lnode1 stp_enable=true"
+        }
+        if { [nodeType $lnode2] == "ext" } {
+
+        catch "exec ovs-vsctl add-br $eid-$lnode2"
+        catch "exec ovs-vsctl set bridge $eid-$lnode2 stp_enable=true"
+        }
+
+
+
+        catch "exec ovs-vsctl add-port $eid-$lnode2 $eid-$lnode1"
+    }
+
+        NETGRAPH-QEMU {
+        if { [nodeType $lnode1] == "ext" } {
+
+        catch "exec ovs-vsctl add-br $eid-$lnode1"
+        catch "exec ovs-vsctl set bridge $eid-$lnode1 stp_enable=true"
+        }
+        if { [nodeType $lnode2] == "ext" } {
+
+        catch "exec ovs-vsctl add-br $eid-$lnode2"
+        catch "exec ovs-vsctl set bridge $eid-$lnode2 stp_enable=true"
+        }
+
+
+
+        catch "exec ovs-vsctl add-port $eid-$lnode1 $eid-$lnode2"
+    }
+
+
     NETGRAPH-NETGRAPH {
         if { [nodeType $lnode1] == "ext" } {
 
@@ -1574,6 +1654,37 @@ WIFIAP-DYNAMIPS {
         addNodeIfcToBridgeN $lname2 $ifname2 $lnode1 $ifname1 $ether1
         }
 
+    NETGRAPH-WIFIAP {
+	# the case of netgraph with wifiap
+    	# we call fonction which add node to bridge
+        addNodeIfcToBridgeAP $lname1 $ifname1 $lnode2 $ifname2 $ether2
+        }
+
+    WIFIAP-QEMU {
+	# the case of  wifiap with netgraph
+    	# we call fonction which add node to bridge
+        addNodeIfcToBridgeAP $lname2 $ifname2 $lnode1 $ifname1 $ether1
+        }
+    QEMU-VIMAGE {
+
+        addNodeIfcToBridge $lname1 $ifname1 $lnode2 $ifname2 $ether2
+        }
+    VIMAGE-QEMU {
+        addNodeIfcToBridge $lname2 $ifname2 $lnode1 $ifname1 $ether1
+        }
+
+    QEMU-NAMESPACE {
+	# the case of netgraph with namespace
+    	# we call fonction which add node to bridge
+        addNodeIfcToBridgeN $lname1 $ifname1 $lnode2 $ifname2 $ether2
+        }
+
+    NAMESPACE-QEMU {
+	# the case of  namespace with netgraph
+    	# we call fonction which add node to bridge
+        addNodeIfcToBridgeN $lname2 $ifname2 $lnode1 $ifname1 $ether1
+        }
+
     DYNAMIPS-DYNAMIPS {
         # the case of  dynamips with dynamips (cisco router)        
     verifierFichier_Dynamips $lnode1
@@ -1740,7 +1851,17 @@ WIFIAP-DYNAMIPS {
         addNodeIfcToBridgeR $lname2 $ifname2 $lnode1 $ifname1 
     }    
      
+    QEMU-DYNAMIPS {
+	# the case of netgraph with dynamips
+	# we call fonction which add node to bridge
+        addNodeIfcToBridgeR $lname1 $ifname1 $lnode2 $ifname2
+        }
 
+    DYNAMIPS-QEMU {
+	# the case of dynamips with netgraph
+	# we call fonction which add node to bridge
+        addNodeIfcToBridgeR $lname2 $ifname2 $lnode1 $ifname1
+    }
     }
 
 
@@ -1840,7 +1961,11 @@ proc killAllNodeProcesses { eid node } {
     set node_id "$eid.$node"
 
     catch "exec docker exec $node_id killall5 -o 1 -9"
-
+    catch {
+        puts "trying to kill vm"
+        set pid [eval exec "pgrep -f qemu-system-x86_64"]
+        eval exec "kill -9 $pid"
+    }
 }
 
 proc destroyVirtNodeIfcs { eid vimages } {}
@@ -2568,7 +2693,7 @@ proc configureIfcLinkParams { eid node ifname bandwidth delay ber dup } {
     set loss 0
     }
 
-    if { [[typemodel $node].virtlayer] == "NETGRAPH" } {
+    if { [[typemodel $node].virtlayer] == "NETGRAPH" || [[typemodel $node].virtlayer] == "QEMU" } {
         catch {exec tc qdisc del dev $eid-$lname-$ifname root}
     # XXX: currently we have loss, but we can easily have
     # corrupt, add a tickbox to GUI, default behaviour
@@ -2601,6 +2726,7 @@ proc configureIfcLinkParams { eid node ifname bandwidth delay ber dup } {
     # in the future we can use something like this: (based on the qlen
     # parameter)
     # set confstring "tbf rate ${bandwidth}bit limit 10mb burst 1540"
+
 }
 
 #****f* linux.tcl/execSetLinkParams
