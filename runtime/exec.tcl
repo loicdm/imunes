@@ -1373,9 +1373,6 @@ foreach node $node_list {
         cleanupSTA $node
 	} elseif { [[typemodel $node].virtlayer] == "QEMU" } {
 
-           #Modification for wifi
-
-
         cleanupQEMU $node
 	}
 

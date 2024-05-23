@@ -326,9 +326,6 @@ proc $MODULE.start { eid node } {
 #****
 proc $MODULE.shutdown { eid node } {
     l3node.shutdown $eid $node
-    puts $node
-    puts $eid
-    exec "echo \"quit\" | socat - unix-connect:/tmp/qemu-sock-$eid.$node"
 }
 
 #****f* qemu.tcl/qemu.destroy
@@ -403,9 +400,15 @@ proc $MODULE.configGUI { c node } {
     configGUI_qemuBootType $configtab $node
     configGUI_qemuMemory $configtab $node
     configGUI_qemuKvm $configtab $node
+    configGUI_servicesConfig $configtab $node
+    configGUI_staticRoutes $configtab $node
+    configGUI_snapshots $configtab $node
+    configGUI_customConfig $configtab $node
+
 
     configGUI_buttonsACNode $wi $node
 }
+
 
 #****f* qemu.tcl/qemu.configInterfacesGUI
 # NAME
