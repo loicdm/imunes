@@ -598,9 +598,9 @@ proc createNodeQemu { node } {
     set iso [getNodeqemuIso $node]
     set kvm [getNodeqemuKvm $node]
   if {$bootType == 0} {
-    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$node_id,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off $kvm -daemonize"
+    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off $kvm -daemonize"
   } else {
-    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$node_id,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off -cdrom $iso -boot order=d $kvm -daemonize" 
+    set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off -cdrom $iso -boot order=d $kvm -daemonize"
   }
 puts $command
 catch { eval exec $command }
