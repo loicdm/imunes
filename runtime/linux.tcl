@@ -1841,7 +1841,7 @@ proc killAllNodeProcesses { eid node } {
 
  
 set socket_path "/tmp/qemu-sock-$node_id"
-
+puts $socket_path
 # Create a temporary file to hold the "quit" command
 set temp_file [open "temp_cmd.txt" "w"]
 puts $temp_file "quit"
