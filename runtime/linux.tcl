@@ -1841,6 +1841,19 @@ proc killAllNodeProcesses { eid node } {
 
     catch "exec docker exec $node_id killall5 -o 1 -9"
     catch "exec echo \"quit\" | socat - unix-connect:/tmp/qemu-sock-$node_id"
+catch {
+    set socket_path "/tmp/qemu-sock-$node_id"
+
+    # Open a pipe to socat
+    set pipe [open "|socat - unix-connect:$socket_path" w]
+
+    # Write "quit" to the pipe
+    puts $pipe "quit"
+
+    # Flush and close the pipe
+    flush $pipe
+    close $pipe
+}
 }
 
 proc destroyVirtNodeIfcs { eid vimages } {}
