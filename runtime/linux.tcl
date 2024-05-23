@@ -909,7 +909,7 @@ proc cleanupQEMU { node } {
     catch { eval exec "ip link delete $eid-$node" }
 
     puts "trying to kill vm"
-    exec "killall qemu-system-x86_64"
+    eval exec "killall qemu-system-x86_64"
 }
 
 
