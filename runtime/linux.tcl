@@ -598,15 +598,15 @@ proc createNodeQemu { node } {
     set bootType [getNodeqemuBootType $node]
     set iso [getNodeqemuIso $node]
     set kvm [getNodeqemuKvm $node]
-    eval exec "ip tuntap add dev $eid-$node mode tap"
-    eval exec "ip link set dev $eid-$node up"
+    # eval exec "ip tuntap add dev $eid-$node mode tap"
+    # eval exec "ip link set dev $eid-$node up"
   if {$bootType == 0} {
     set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -spice unix=on,addr=/tmp/vm_spice-$node_id.socket,disable-ticketing=on -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off $kvm -daemonize"
   } else {
     set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -spice unix=on,addr=/tmp/vm_spice-$node_id.socket,disable-ticketing=on -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off -cdrom $iso -boot order=d $kvm -daemonize"
   }
     puts $command
-    catch { eval exec $command }
+    eval exec $command
 
 }
 
