@@ -252,14 +252,19 @@ proc spawnShellExec {} {
 	    return
 	}
     }
+
+
+    if { [[typemodel $node].virtlayer] == "QEMU"} {
+        catch { eval exec "remote-viewer spice+unix:///tmp/vm_spice-$eid.$node.socket" }
+        return
+
+    }
+
     # if the de type of node is different of namespace or dynamips or vimage do nothing 
     # else display terminal of node
     if { [[typemodel $node].virtlayer] != "VIMAGE" && [[typemodel $node].virtlayer] != "NAMESPACE" && [[typemodel $node].virtlayer] != "DYNAMIPS" && [[typemodel $node].virtlayer] != "WIFIAP" && [[typemodel $node].virtlayer] != "WIFISTA"} {
 	nodeConfigGUI .panwin.f1.c $node
-    } elseif {[[typemodel $node].virtlayer] == "QEMU"} {
-        eval exec "remote-viewer spice+unix:///tmp/vm_spice-$eid.$node.socket"
-    }
-    else {
+    } else {
       set type [nodeType $node]
 
       if {$type == "router"} {
