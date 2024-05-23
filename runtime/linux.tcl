@@ -597,13 +597,15 @@ proc createNodeQemu { node } {
     set bootType [getNodeqemuBootType $node]
     set iso [getNodeqemuIso $node]
     set kvm [getNodeqemuKvm $node]
+
   if {$bootType == 0} {
     set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off $kvm -daemonize"
   } else {
     set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off -cdrom $iso -boot order=d $kvm -daemonize"
   }
-puts $command
-catch { eval exec $command }
+    puts $command
+    catch { eval exec $command }
+    exec "ip link set dev $eid-$node up"
 }
 
 
@@ -1612,6 +1614,13 @@ WIFIAP-DYNAMIPS {
 	# the case of  wifiap with netgraph
     	# we call fonction which add node to bridge
         addNodeIfcToBridgeAP $lname2 $ifname2 $lnode1 $ifname1 $ether1
+        }
+    QEMU-NETGRAPH {
+
+        addNodeIfcToBridge $lname1 $ifname1 $lnode2 $ifname2 $ether2
+        }
+    NETGRAPH-QEMU {
+        addNodeIfcToBridge $lname2 $ifname2 $lnode1 $ifname1 $ether1
         }
 
     QEMU-VIMAGE {
