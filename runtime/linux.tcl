@@ -597,7 +597,8 @@ proc createNodeQemu { node } {
     set bootType [getNodeqemuBootType $node]
     set iso [getNodeqemuIso $node]
     set kvm [getNodeqemuKvm $node]
-
+    exec "ip tuntap add dev $eid-$node mode tap"
+    exec "ip link set dev $eid-$node up"
   if {$bootType == 0} {
     set command "qemu-system-x86_64 -m $memory -hda $image -nic tap,ifname=$eid-$node,script=no,downscript=no -display none -vga qxl -vnc :0 -k fr -monitor unix:/tmp/qemu-sock-$node_id,server,wait=off $kvm -daemonize"
   } else {
@@ -605,7 +606,7 @@ proc createNodeQemu { node } {
   }
     puts $command
     catch { eval exec $command }
-    exec "ip link set dev $eid-$node up"
+
 }
 
 
