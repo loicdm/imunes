@@ -256,7 +256,7 @@ proc spawnShellExec {} {
     # else display terminal of node
     if { [[typemodel $node].virtlayer] != "VIMAGE" && [[typemodel $node].virtlayer] != "NAMESPACE" && [[typemodel $node].virtlayer] != "DYNAMIPS" && [[typemodel $node].virtlayer] != "WIFIAP" && [[typemodel $node].virtlayer] != "WIFISTA"} {
 	nodeConfigGUI .panwin.f1.c $node
-    } else if {[[typemodel $node].virtlayer] = "QEMU"} {
+    } elseif {[[typemodel $node].virtlayer] == "QEMU"} {
         eval exec "remote-viewer spice+unix:///tmp/vm_spice-$eid.$node.socket"
     }
     else {
