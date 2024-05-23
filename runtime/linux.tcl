@@ -908,9 +908,8 @@ proc cleanupQEMU { node } {
     set id [lindex $id 1]
     catch { eval exec "ip link delete $eid-$node" }
 
-        puts "trying to kill vm"
-        set pid [eval exec "pgrep -f qemu-system-x86_64"]
-        exec "kill -9 $pid"
+    puts "trying to kill vm"
+    exec "killall qemu-system-x86_64"
 }
 
 
