@@ -1210,18 +1210,12 @@ proc createLinkBetween { lnode1 lnode2 ifname1 ifname2 } {
         catch "exec ovs-vsctl set bridge $eid-$lnode2 stp_enable=true"
         }
 
-        set hostIfc1 "$eid-$lname1-$ifname1"
-        set hostIfc2 "$eid-$lname2-$ifname2"
 
-        catch {exec ip link add name "$hostIfc1" type veth peer name "$hostIfc2"}
 
-        catch "exec ovs-vsctl add-port $eid-$lname1 $hostIfc1"
-        catch "exec ovs-vsctl add-port $eid-$lname2 $hostIfc2"
-        # set bridge interfaces up
-        exec ip link set dev $hostIfc1 up
-        exec ip link set dev $hostIfc2 up
+        catch "exec ovs-vsctl add-port $eid-$lnode2 $eid-$lnode1"
     }
-    NETGRAPH-QEMU {
+
+        NETGRAPH-QEMU {
         if { [nodeType $lnode1] == "ext" } {
 
         catch "exec ovs-vsctl add-br $eid-$lnode1"
@@ -1233,16 +1227,9 @@ proc createLinkBetween { lnode1 lnode2 ifname1 ifname2 } {
         catch "exec ovs-vsctl set bridge $eid-$lnode2 stp_enable=true"
         }
 
-        set hostIfc1 "$eid-$lname1-$ifname1"
-        set hostIfc2 "$eid-$lname2-$ifname2"
 
-        catch {exec ip link add name "$hostIfc1" type veth peer name "$hostIfc2"}
 
-        catch "exec ovs-vsctl add-port $eid-$lname1 $hostIfc1"
-        catch "exec ovs-vsctl add-port $eid-$lname2 $hostIfc2"
-        # set bridge interfaces up
-        exec ip link set dev $hostIfc1 up
-        exec ip link set dev $hostIfc2 up
+        catch "exec ovs-vsctl add-port $eid-$lnode1 $eid-$lnode2"
     }
 
 
