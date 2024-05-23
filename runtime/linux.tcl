@@ -904,12 +904,17 @@ proc cleanupSTA { node } {
 proc cleanupQEMU { node } {
     upvar 0 ::cf::[set ::curcfg]::eid eid
     set node_id "$eid.$node"
+
     set id [split $node "n"]
     set id [lindex $id 1]
     catch { eval exec "ip link delete $eid-$node" }
 
     puts "trying to kill vm"
+    catch {
     eval exec "killall qemu-system-x86_64"
+    eval exec "rm /tmp/qemu-sock-$node_id"
+    eval exec "rm /tmp/vm_spice-$node_id.socket"
+    }
 }
 
 
